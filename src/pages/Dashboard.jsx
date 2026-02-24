@@ -31,11 +31,6 @@ export default function Dashboard() {
 
   return (
     <div class="container">
-      <div class="page-header">
-        <h1 class="page-title">Dashboard</h1>
-        <p class="page-subtitle">Welcome to your admin dashboard</p>
-      </div>
-
       {loading() ? (
         <div class="loading">Loading dashboard...</div>
       ) : (

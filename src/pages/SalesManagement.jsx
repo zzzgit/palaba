@@ -93,11 +93,6 @@ export default function SalesManagement() {
 
   return (
     <div class="container">
-      <div class="page-header">
-        <h1 class="page-title">Sales Management</h1>
-        <p class="page-subtitle">Track and manage your sales transactions</p>
-      </div>
-
       {/* Summary Stats */}
       <div class="stats-grid" style="grid-template-columns: repeat(3, 1fr);">
         <div class="stat-card">

@@ -128,11 +128,6 @@ export default function CustomerManagement() {
 
   return (
     <div class="container">
-      <div class="page-header">
-        <h1 class="page-title">Customer Management</h1>
-        <p class="page-subtitle">Manage your customer database</p>
-      </div>
-
       <div class="table-container">
         <div class="table-header">
           <h3 class="card-title">Customers</h3>
