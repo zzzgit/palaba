@@ -7,14 +7,14 @@ export default function CustomerManagement(){
 	const [filteredCustomers, setFilteredCustomers] = createSignal([])
 	const [loading, setLoading] = createSignal(true)
 	const [searchTerm, setSearchTerm] = createSignal('')
-	const [statusFilter, setStatusFilter] = createSignal('all')
 	const [showModal, setShowModal] = createSignal(false)
 	const [editingCustomer, setEditingCustomer] = createSignal(null)
 
 	const [formData, setFormData] = createSignal({
 		name: '',
-		email: '',
-		status: 'active',
+		gender: 'MALE',
+		phone: '',
+		extra: '',
 	})
 
 	onMount(async()=> {
@@ -38,23 +38,14 @@ export default function CustomerManagement(){
 
 	const handleSearch = (value)=> {
 		setSearchTerm(value)
-		filterCustomers(value, statusFilter())
+		filterCustomers(value)
 	}
 
-	const handleStatusFilter = (value)=> {
-		setStatusFilter(value)
-		filterCustomers(searchTerm(), value)
-	}
-
-	const filterCustomers = (search, status)=> {
+	const filterCustomers = (search)=> {
 		let filtered = customers()
 
 		if (search){
-			filtered = filtered.filter(c=> c.name.toLowerCase().includes(search.toLowerCase()) || c.email.toLowerCase().includes(search.toLowerCase()))
-		}
-
-		if (status !== 'all'){
-			filtered = filtered.filter(c=> c.status === status)
+			filtered = filtered.filter(c=> c.name.toLowerCase().includes(search.toLowerCase()) || c.phone && c.phone.toLowerCase().includes(search.toLowerCase()))
 		}
 
 		setFilteredCustomers(filtered)
@@ -65,13 +56,14 @@ export default function CustomerManagement(){
 			setEditingCustomer(customer)
 			setFormData({
 				name: customer.name,
-				email: customer.email,
-				status: customer.status,
+				gender: customer.gender || 'MALE',
+				phone: customer.phone || '',
+				extra: customer.extra || '',
 			})
 		} else {
 			setEditingCustomer(null)
 			setFormData({
-				name: '', email: '', status: 'active',
+				name: '', gender: 'MALE', phone: '', extra: '',
 			})
 		}
 		setShowModal(true)
@@ -81,7 +73,7 @@ export default function CustomerManagement(){
 		setShowModal(false)
 		setEditingCustomer(null)
 		setFormData({
-			name: '', email: '', status: 'active',
+			name: '', gender: 'MALE', phone: '', extra: '',
 		})
 	}
 
@@ -118,15 +110,6 @@ export default function CustomerManagement(){
 		}).format(value)
 	}
 
-	const getStatusBadge = (status)=> {
-		const statusMap = {
-			active: 'badge-success',
-			inactive: 'badge-error',
-			pending: 'badge-warning',
-		}
-		return statusMap[status] || 'badge-info'
-	}
-
 	return (
 		<div class='container'>
 			<div class='table-container'>
@@ -140,17 +123,6 @@ export default function CustomerManagement(){
 							value={searchTerm()}
 							onInput={e=> handleSearch(e.target.value)}
 						/>
-						<select
-							class='search-box'
-							style={{ width: '150px' }}
-							value={statusFilter()}
-							onChange={e=> handleStatusFilter(e.target.value)}
-						>
-							<option value='all'>All Status</option>
-							<option value='active'>Active</option>
-							<option value='inactive'>Inactive</option>
-							<option value='pending'>Pending</option>
-						</select>
 						<button class='btn btn-primary' onClick={()=> openModal()}>
 							+ Add Customer
 						</button>
@@ -162,28 +134,22 @@ export default function CustomerManagement(){
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
-							<th>Email</th>
-							<th>Status</th>
-							<th>Join Date</th>
-							<th>Orders</th>
-							<th>Total Spent</th>
+							<th>Gender</th>
+							<th>Phone</th>
+							<th>Extra Info</th>
+							<th>Created</th>
 							<th>Actions</th>
 						</tr>
 					</thead>
 					<tbody>
 						<For each={filteredCustomers()}>
 							{customer=> <tr>
-								<td>{customer.id}</td>
+								<td>{customer.id.substring(0, 8)}...</td>
 								<td>{customer.name}</td>
-								<td>{customer.email}</td>
-								<td>
-									<span class={`badge ${getStatusBadge(customer.status)}`}>
-										{customer.status}
-									</span>
-								</td>
-								<td>{customer.joinDate}</td>
-								<td>{customer.totalOrders}</td>
-								<td>{formatCurrency(customer.totalSpent)}</td>
+								<td>{customer.gender || '-'}</td>
+								<td>{customer.phone || '-'}</td>
+								<td>{customer.extra || '-'}</td>
+								<td>{new Date(customer.createdAt).toLocaleDateString()}</td>
 								<td class='table-actions-cell'>
 									<button
 										class='btn btn-secondary btn-small'
@@ -260,33 +226,45 @@ export default function CustomerManagement(){
 								<label style={{
 									display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
 								}}>
-									Email
+									Gender
 								</label>
-								<input
-									type='email'
+								<select
 									class='search-box'
 									style={{ width: '100%' }}
-									value={formData().email}
-									onInput={e=> setFormData({ ...formData(), email: e.target.value })}
-									required
+									value={formData().gender}
+									onChange={e=> setFormData({ ...formData(), gender: e.target.value })}
+								>
+									<option value='MALE'>Male</option>
+									<option value='FEMALE'>Female</option>
+									<option value='OTHER'>Other</option>
+								</select>
+							</div>
+							<div style={{ 'margin-bottom': '16px' }}>
+								<label style={{
+									display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
+								}}>
+									Phone
+								</label>
+								<input
+									type='tel'
+									class='search-box'
+									style={{ width: '100%' }}
+									value={formData().phone}
+									onInput={e=> setFormData({ ...formData(), phone: e.target.value })}
 								/>
 							</div>
 							<div style={{ 'margin-bottom': '24px' }}>
 								<label style={{
 									display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
 								}}>
-									Status
+									Extra Info
 								</label>
-								<select
+								<textarea
 									class='search-box'
-									style={{ width: '100%' }}
-									value={formData().status}
-									onChange={e=> setFormData({ ...formData(), status: e.target.value })}
-								>
-									<option value='active'>Active</option>
-									<option value='inactive'>Inactive</option>
-									<option value='pending'>Pending</option>
-								</select>
+									style={{ width: '100%', 'min-height': '80px' }}
+									value={formData().extra}
+									onInput={e=> setFormData({ ...formData(), extra: e.target.value })}
+								/>
 							</div>
 							<div style={{
 								display: 'flex', gap: '12px', 'justify-content': 'flex-end',

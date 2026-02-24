@@ -14,23 +14,35 @@ const delay = (ms = 300)=> new Promise(resolve=> setTimeout(resolve, ms))
 export const mockCustomerAPI = {
 	async getAll(){
 		await delay()
-		return { success: true, data: [...customersData] }
+		// Filter out soft-deleted customers
+		return { success: true, data: [...customersData.filter(c=> !c.deletedAt)] }
 	},
 
 	async getById(id){
 		await delay()
-		const customer = customersData.find(c=> c.id === parseInt(id))
+		const customer = customersData.find(c=> c.id === id && !c.deletedAt)
 		return customer ? { success: true, data: customer } : { success: false, error: 'Customer not found' }
 	},
 
 	async create(customerData){
 		await delay()
+		const generateUUID = ()=> {
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c=> {
+				const r = (Math.random() * 16) | 0
+				const v = c === 'x' ? r : (r & 0x3) | 0x8
+				return v.toString(16)
+			})
+		}
+		const now = new Date().toISOString()
 		const newCustomer = {
-			id: Math.max(...customersData.map(c=> c.id)) + 1,
+			id: generateUUID(),
 			...customerData,
-			joinDate: new Date().toISOString().split('T')[0],
-			totalOrders: 0,
-			totalSpent: 0,
+			gender: customerData.gender || null,
+			phone: customerData.phone || null,
+			extra: customerData.extra || null,
+			createdAt: now,
+			updatedAt: now,
+			deletedAt: null,
 		}
 		customersData.push(newCustomer)
 		return { success: true, data: newCustomer }
@@ -38,21 +50,22 @@ export const mockCustomerAPI = {
 
 	async update(id, customerData){
 		await delay()
-		const index = customersData.findIndex(c=> c.id === parseInt(id))
-		if (index === -1){
+		const index = customersData.findIndex(c=> c.id === id)
+		if (index === -1 || customersData[index].deletedAt){
 			return { success: false, error: 'Customer not found' }
 		}
-		customersData[index] = { ...customersData[index], ...customerData }
+		customersData[index] = { ...customersData[index], ...customerData, updatedAt: new Date().toISOString() }
 		return { success: true, data: customersData[index] }
 	},
 
 	async delete(id){
 		await delay()
-		const index = customersData.findIndex(c=> c.id === parseInt(id))
+		const index = customersData.findIndex(c=> c.id === id)
 		if (index === -1){
 			return { success: false, error: 'Customer not found' }
 		}
-		customersData.splice(index, 1)
+		// Soft delete
+		customersData[index].deletedAt = new Date().toISOString()
 		return { success: true, message: 'Customer deleted successfully' }
 	},
 }
