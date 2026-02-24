@@ -157,53 +157,54 @@ export default function CustomerManagement(){
 					</div>
 				</div>
 
-				{loading()? <div class='loading'>Loading customers...</div>: <table>
-						<thead>
-							<tr>
-								<th>ID</th>
-								<th>Name</th>
-								<th>Email</th>
-								<th>Status</th>
-								<th>Join Date</th>
-								<th>Orders</th>
-								<th>Total Spent</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<For each={filteredCustomers()}>
-								{customer=> <tr>
-									<td>{customer.id}</td>
-									<td>{customer.name}</td>
-									<td>{customer.email}</td>
-									<td>
-										<span class={`badge ${getStatusBadge(customer.status)}`}>
-											{customer.status}
-										</span>
-									</td>
-									<td>{customer.joinDate}</td>
-									<td>{customer.totalOrders}</td>
-									<td>{formatCurrency(customer.totalSpent)}</td>
-									<td class='table-actions-cell'>
-										<button
-											class='btn btn-secondary btn-small'
-											onClick={()=> openModal(customer)}
-										>
+				<Show when={loading()} fallback={<table>
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th>Email</th>
+							<th>Status</th>
+							<th>Join Date</th>
+							<th>Orders</th>
+							<th>Total Spent</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<For each={filteredCustomers()}>
+							{customer=> <tr>
+								<td>{customer.id}</td>
+								<td>{customer.name}</td>
+								<td>{customer.email}</td>
+								<td>
+									<span class={`badge ${getStatusBadge(customer.status)}`}>
+										{customer.status}
+									</span>
+								</td>
+								<td>{customer.joinDate}</td>
+								<td>{customer.totalOrders}</td>
+								<td>{formatCurrency(customer.totalSpent)}</td>
+								<td class='table-actions-cell'>
+									<button
+										class='btn btn-secondary btn-small'
+										onClick={()=> openModal(customer)}
+									>
 										Edit
-                      </button>
-										<button
-											class='btn btn-secondary btn-small'
-											onClick={()=> handleDelete(customer.id)}
-										>
+									</button>
+									<button
+										class='btn btn-secondary btn-small'
+										onClick={()=> handleDelete(customer.id)}
+									>
 										Delete
-                      </button>
-									</td>
-								</tr>
-								}
-							</For>
-						</tbody>
-					</table>
-				}
+									</button>
+								</td>
+							</tr>
+							}
+						</For>
+					</tbody>
+				</table>}>
+					<div class='loading'>Loading customers...</div>
+				</Show>
 
 				<Show when={filteredCustomers().length === 0 && !loading()}>
 					<div class='empty-state'>
@@ -235,7 +236,9 @@ export default function CustomerManagement(){
 						'max-width': '90%',
 					}}>
 						<h2 style={{ 'margin-bottom': '24px' }}>
-							{editingCustomer() ? 'Edit Customer' : 'Add New Customer'}
+							<Show when={editingCustomer()} fallback='Add New Customer'>
+								Edit Customer
+							</Show>
 						</h2>
 						<form onSubmit={handleSubmit}>
 							<div style={{ 'margin-bottom': '16px' }}>
