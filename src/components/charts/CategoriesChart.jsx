@@ -8,7 +8,7 @@ import {
   Legend
 } from 'chart.js';
 import { mockDashboardAPI } from '../../mocks/mockAPI.js';
-import '../styles/global.css';
+import '../../styles/global.css';
 
 ChartJS.register(
   ArcElement,
