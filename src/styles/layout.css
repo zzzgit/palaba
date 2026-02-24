@@ -107,6 +107,8 @@
     flex-direction: column;
     transition: width 0.3s ease;
     position: relative;
+    height: calc(100vh - 68px);
+    overflow-y: auto;
 }
 
 .sidebar.collapsed {
