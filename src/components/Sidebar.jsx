@@ -6,6 +6,9 @@ export default function Sidebar(props) {
 
   const toggleSidebar = () => {
     setCollapsed(!collapsed());
+    if (props.onCollapsedChange) {
+      props.onCollapsedChange(!collapsed());
+    }
   };
 
   const navItems = [

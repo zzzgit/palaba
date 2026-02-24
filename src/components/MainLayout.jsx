@@ -1,8 +1,11 @@
+import { createSignal } from 'solid-js';
 import Sidebar from './Sidebar.jsx';
 import Banner from './Banner.jsx';
 import '../styles/layout.css';
 
 export default function MainLayout(props) {
+  const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false);
+
   const getBreadcrumbs = () => {
     const page = props.currentPage || 'dashboard';
     const breadcrumbs = [
@@ -25,8 +28,12 @@ export default function MainLayout(props) {
   return (
     <div class="holy-grail-layout">
       <Banner />
-      <div class="holy-grail-body">
-        <Sidebar activePage={props.currentPage} onNavigate={props.onNavigate} />
+      <div class={`holy-grail-body ${sidebarCollapsed() ? 'sidebar-collapsed' : ''}`}>
+        <Sidebar 
+          activePage={props.currentPage} 
+          onNavigate={props.onNavigate}
+          onCollapsedChange={setSidebarCollapsed}
+        />
         <main class="holy-grail-content">
           <div class="breadcrumbs">
             {getBreadcrumbs().map((crumb, index) => (
