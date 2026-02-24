@@ -101,12 +101,14 @@
 /* Sidebar Styles */
 .sidebar {
     width: 260px;
+    height: calc(100vh - 68px);
     background-color: #1a1a2e;
     color: white;
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
     position: relative;
+    overflow-y: auto;
 }
 
 .sidebar.collapsed {
