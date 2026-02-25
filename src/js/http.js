@@ -45,13 +45,27 @@ const doDelete = (endpoint, ids)=> {
 		options.body = JSON.stringify({ ids })
 	}
 	return fetch(url, options).then((response)=> {
-		return response.json().then((json)=> {
-			if (!response.ok){
-				const errorMsg = json.message || json.error || `HTTP error! status: ${response.status}`
+		if (!response.ok){
+			// Try to parse error message if available
+			return response.text().then((text)=> {
+				let errorMsg
+				try {
+					const json = JSON.parse(text)
+					errorMsg = json.message || json.error || `HTTP error! status: ${response.status}`
+				} catch {
+					errorMsg = text || `HTTP error! status: ${response.status}`
+				}
 				throw new Error(errorMsg)
-			}
-			return json
-		})
+			})
+		}
+		
+		// For successful responses, check if there's content before parsing
+		const contentType = response.headers.get('content-type')
+		if (response.status === 204 || !contentType || !contentType.includes('application/json')) {
+			return { success: true }
+		}
+		
+		return response.json()
 	}).catch((error)=> {
 		console.error('Error in DELETE request:', error)
 		throw error
