@@ -4,6 +4,7 @@ import MainLayout from './components/MainLayout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import CustomerManagement from './pages/CustomerManagement.jsx'
 import SalesManagement from './pages/SalesManagement.jsx'
+import './styles/tailwind.css'
 import './styles/global.css'
 import './styles/layout.css'
 

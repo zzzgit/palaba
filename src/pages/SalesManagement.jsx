@@ -1,4 +1,7 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
+import { Button } from '../components/ui/button.jsx'
+import { Input } from '../components/ui/input.jsx'
+import { Select } from '../components/ui/select.jsx'
 import { mockSalesAPI } from '../mocks/mockAPI.js'
 import '../styles/global.css'
 
@@ -110,16 +113,13 @@ export default function SalesManagement(){
 				<div class='table-header'>
 					<h3 class='card-title'>Sales Transactions</h3>
 					<div class='table-actions'>
-						<input
+						<Input
 							type='text'
-							class='search-box'
 							placeholder='Search by customer or order ID...'
 							value={searchTerm()}
 							onInput={e=> handleSearch(e.target.value)}
 						/>
-						<select
-							class='search-box'
-							style={{ width: '150px' }}
+						<Select
 							value={statusFilter()}
 							onChange={e=> handleStatusFilter(e.target.value)}
 						>
@@ -127,7 +127,7 @@ export default function SalesManagement(){
 							<option value='completed'>Completed</option>
 							<option value='processing'>Processing</option>
 							<option value='pending'>Pending</option>
-						</select>
+						</Select>
 					</div>
 				</div>
 
@@ -158,20 +158,22 @@ export default function SalesManagement(){
 								</td>
 								<td class='table-actions-cell'>
 									<Show when={sale.status === 'pending'}>
-										<button
-											class='btn btn-secondary btn-small'
+										<Button
+											variant='secondary'
+											size='sm'
 											onClick={()=> handleUpdateStatus(sale.id, 'processing')}
 										>
 											Process
-										</button>
+										</Button>
 									</Show>
 									<Show when={sale.status === 'processing'}>
-										<button
-											class='btn btn-secondary btn-small'
+										<Button
+											variant='secondary'
+											size='sm'
 											onClick={()=> handleUpdateStatus(sale.id, 'completed')}
 										>
 											Complete
-										</button>
+										</Button>
 									</Show>
 								</td>
 							</tr>

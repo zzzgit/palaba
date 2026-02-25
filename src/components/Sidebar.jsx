@@ -1,4 +1,5 @@
 import { For, Show, createSignal } from 'solid-js'
+import { Button } from './ui/button.jsx'
 import '../styles/layout.css'
 
 export default function Sidebar(props){
@@ -43,11 +44,16 @@ export default function Sidebar(props){
 		<aside class={getSidebarClass()}>
 			<div class='sidebar-header'>
 				<div class='sidebar-logo'>Admin Panel</div>
-				<button class='sidebar-toggle' onClick={toggleSidebar}>
+				<Button
+					variant="ghost"
+					size="sm"
+					class='sidebar-toggle'
+					onClick={toggleSidebar}
+				>
 					<Show when={collapsed()} fallback='✕'>
 						☰
 					</Show>
-				</button>
+				</Button>
 			</div>
 			<nav class='sidebar-nav'>
 				<For each={navItems}>{item=> <a
