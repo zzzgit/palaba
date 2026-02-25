@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onMount } from 'solid-js'
+import { Show, createSignal, onMount } from 'solid-js'
 import { Line } from 'solid-chartjs'
 import {
 	CategoryScale,
@@ -59,8 +59,11 @@ export default function SalesTrendChart(){
 	return (
 		<div class='chart-container full-width'>
 			<h3 class='card-title'>Sales Trend</h3>
-			{loading() ? <div class='loading'>Loading chart...</div> : chartData() && <Line data={chartData()} options={options} />
-			}
+			<Show when={loading()} fallback={<Show when={chartData()}>
+				<Line data={chartData()} options={options} />
+			</Show>}>
+				<div class='loading'>Loading chart...</div>
+			</Show>
 		</div>
 	)
 }

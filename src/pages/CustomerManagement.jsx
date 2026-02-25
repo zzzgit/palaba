@@ -273,7 +273,9 @@ export default function CustomerManagement(){
 									Cancel
 								</button>
 								<button type='submit' class='btn btn-primary'>
-									{editingCustomer() ? 'Update' : 'Create'}
+									<Show when={editingCustomer()} fallback='Create'>
+										Update
+									</Show>
 								</button>
 							</div>
 						</form>

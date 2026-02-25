@@ -1,10 +1,26 @@
-import { createSignal } from 'solid-js'
+import { For, createSignal } from 'solid-js'
 import Sidebar from './Sidebar.jsx'
 import Banner from './Banner.jsx'
 import '../styles/layout.css'
 
 export default function MainLayout(props){
 	const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false)
+
+	const getBodyClass = ()=> {
+		if (sidebarCollapsed()){
+			return 'holy-grail-body sidebar-collapsed'
+		}
+
+		return 'holy-grail-body'
+	}
+
+	const getBreadcrumbClass = (crumb)=> {
+		if (crumb.active){
+			return 'breadcrumb-item active'
+		}
+
+		return 'breadcrumb-item'
+	}
 
 	const getBreadcrumbs = ()=> {
 		const page = props.currentPage || 'dashboard'
@@ -30,7 +46,7 @@ export default function MainLayout(props){
 	return (
 		<div class='holy-grail-layout'>
 			<Banner />
-			<div class={`holy-grail-body ${sidebarCollapsed() ? 'sidebar-collapsed' : ''}`}>
+			<div class={getBodyClass()}>
 				<Sidebar
 					activePage={props.currentPage}
 					onNavigate={props.onNavigate}
@@ -38,15 +54,17 @@ export default function MainLayout(props){
 				/>
 				<main class='holy-grail-content'>
 					<div class='breadcrumbs'>
-						{getBreadcrumbs().map((crumb, index)=> <>
-							{index > 0 && <span class='breadcrumb-separator'>/</span>}
-							<a
-								class={`breadcrumb-item ${crumb.active ? 'active' : ''}`}
-								onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
-							>
-								{crumb.label}
-							</a>
-						</>)}
+						<For each={getBreadcrumbs()}>
+							{(crumb, index)=> <>
+								{index() > 0 && <span class='breadcrumb-separator'>/</span>}
+								<a
+									class={getBreadcrumbClass(crumb)}
+									onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
+								>
+									{crumb.label}
+								</a>
+							</>}
+						</For>
 					</div>
 					<div class='content-wrapper'>
 						{props.children}

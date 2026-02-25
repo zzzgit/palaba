@@ -1,8 +1,24 @@
-import { For, createSignal } from 'solid-js'
+import { For, Show, createSignal } from 'solid-js'
 import '../styles/layout.css'
 
 export default function Sidebar(props){
 	const [collapsed, setCollapsed] = createSignal(false)
+
+	const getSidebarClass = ()=> {
+		if (collapsed()){
+			return 'sidebar collapsed'
+		}
+
+		return 'sidebar'
+	}
+
+	const getNavItemClass = (item)=> {
+		if (props.activePage === item.id){
+			return 'nav-item active'
+		}
+
+		return 'nav-item'
+	}
 
 	const toggleSidebar = ()=> {
 		setCollapsed(!collapsed())
@@ -24,16 +40,18 @@ export default function Sidebar(props){
 	]
 
 	return (
-		<aside class={`sidebar ${collapsed() ? 'collapsed' : ''}`}>
+		<aside class={getSidebarClass()}>
 			<div class='sidebar-header'>
 				<div class='sidebar-logo'>Admin Panel</div>
 				<button class='sidebar-toggle' onClick={toggleSidebar}>
-					{collapsed() ? '☰' : '✕'}
+					<Show when={collapsed()} fallback='✕'>
+						☰
+					</Show>
 				</button>
 			</div>
 			<nav class='sidebar-nav'>
 				<For each={navItems}>{item=> <a
-					class={`nav-item ${props.activePage === item.id ? 'active' : ''}`}
+					class={getNavItemClass(item)}
 					onClick={()=> props.onNavigate(item.id)}
 				>
 					<span class='nav-icon'>{item.icon}</span>

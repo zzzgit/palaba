@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { Show, createSignal, onMount } from 'solid-js'
 import { Pie } from 'solid-chartjs'
 import {
 	ArcElement,
@@ -47,8 +47,11 @@ export default function CategoriesChart(){
 	return (
 		<div class='chart-container'>
 			<h3 class='card-title'>Sales by Category</h3>
-			{loading() ? <div class='loading'>Loading chart...</div> : chartData() && <Pie data={chartData()} options={options} />
-			}
+			<Show when={loading()} fallback={<Show when={chartData()}>
+				<Pie data={chartData()} options={options} />
+			</Show>}>
+				<div class='loading'>Loading chart...</div>
+			</Show>
 		</div>
 	)
 }

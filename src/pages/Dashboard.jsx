@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { Show, createSignal, onMount } from 'solid-js'
 import SalesTrendChart from '../components/charts/SalesTrendChart.jsx'
 import CustomerGrowthChart from '../components/charts/CustomerGrowthChart.jsx'
 import CategoriesChart from '../components/charts/CategoriesChart.jsx'
@@ -31,9 +31,7 @@ export default function Dashboard(){
 
 	return (
 		<div class='container'>
-			{loading()
-? <div class='loading'>Loading dashboard...</div>
-: <>
+			<Show when={loading()} fallback={<>
 				<div class='stats-grid'>
 					<div class='stat-card'>
 						<div class='stat-label'>Total Revenue</div>
@@ -63,8 +61,9 @@ export default function Dashboard(){
 					<CustomerGrowthChart />
 					<CategoriesChart />
 				</div>
-			</>
-			}
+			</>}>
+				<div class='loading'>Loading dashboard...</div>
+			</Show>
 		</div>
 	)
 }

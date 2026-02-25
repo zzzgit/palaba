@@ -1,6 +1,15 @@
+import { For } from 'solid-js'
 import '../styles/layout.css'
 
 export default function Header(props){
+	const getBreadcrumbClass = (crumb)=> {
+		if (crumb.active){
+			return 'breadcrumb-item active'
+		}
+
+		return 'breadcrumb-item'
+	}
+
 	const getBreadcrumbs = ()=> {
 		const page = props.currentPage || 'dashboard'
 		const breadcrumbs = [
@@ -25,15 +34,17 @@ export default function Header(props){
 	return (
 		<header class='app-header'>
 			<div class='breadcrumbs'>
-				{getBreadcrumbs().map((crumb, index)=> <>
-					{index > 0 && <span class='breadcrumb-separator'>/</span>}
-					<a
-						class={`breadcrumb-item ${crumb.active ? 'active' : ''}`}
-						onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
-					>
-						{crumb.label}
-					</a>
-				</>)}
+				<For each={getBreadcrumbs()}>
+					{(crumb, index)=> <>
+						{index() > 0 && <span class='breadcrumb-separator'>/</span>}
+						<a
+							class={getBreadcrumbClass(crumb)}
+							onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
+						>
+							{crumb.label}
+						</a>
+					</>}
+				</For>
 			</div>
 			<div class='header-actions'>
 				<div class='user-info'>

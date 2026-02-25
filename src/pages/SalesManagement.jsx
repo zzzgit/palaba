@@ -131,55 +131,56 @@ export default function SalesManagement(){
 					</div>
 				</div>
 
-				{loading()? <div class='loading'>Loading sales...</div>: <table>
-						<thead>
-							<tr>
-								<th>Order ID</th>
-								<th>Customer</th>
-								<th>Date</th>
-								<th>Items</th>
-								<th>Amount</th>
-								<th>Status</th>
-								<th>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							<For each={filteredSales()}>
-								{sale=> <tr>
-									<td>#{sale.id}</td>
-									<td>{sale.customerName}</td>
-									<td>{sale.orderDate}</td>
-									<td>{sale.items}</td>
-									<td>{formatCurrency(sale.amount)}</td>
-									<td>
-										<span class={`badge ${getStatusBadge(sale.status)}`}>
-											{sale.status}
-										</span>
-									</td>
-									<td class='table-actions-cell'>
-										<Show when={sale.status === 'pending'}>
-											<button
-												class='btn btn-secondary btn-small'
-												onClick={()=> handleUpdateStatus(sale.id, 'processing')}
-											>
+				<Show when={loading()} fallback={<table>
+					<thead>
+						<tr>
+							<th>Order ID</th>
+							<th>Customer</th>
+							<th>Date</th>
+							<th>Items</th>
+							<th>Amount</th>
+							<th>Status</th>
+							<th>Actions</th>
+						</tr>
+					</thead>
+					<tbody>
+						<For each={filteredSales()}>
+							{sale=> <tr>
+								<td>#{sale.id}</td>
+								<td>{sale.customerName}</td>
+								<td>{sale.orderDate}</td>
+								<td>{sale.items}</td>
+								<td>{formatCurrency(sale.amount)}</td>
+								<td>
+									<span class={`badge ${getStatusBadge(sale.status)}`}>
+										{sale.status}
+									</span>
+								</td>
+								<td class='table-actions-cell'>
+									<Show when={sale.status === 'pending'}>
+										<button
+											class='btn btn-secondary btn-small'
+											onClick={()=> handleUpdateStatus(sale.id, 'processing')}
+										>
 											Process
-                        </button>
-										</Show>
-										<Show when={sale.status === 'processing'}>
-											<button
-												class='btn btn-secondary btn-small'
-												onClick={()=> handleUpdateStatus(sale.id, 'completed')}
-											>
+										</button>
+									</Show>
+									<Show when={sale.status === 'processing'}>
+										<button
+											class='btn btn-secondary btn-small'
+											onClick={()=> handleUpdateStatus(sale.id, 'completed')}
+										>
 											Complete
-                        </button>
-										</Show>
-									</td>
-								</tr>
-								}
-							</For>
-						</tbody>
-					</table>
-				}
+										</button>
+									</Show>
+								</td>
+							</tr>
+							}
+						</For>
+					</tbody>
+				</table>}>
+					<div class='loading'>Loading sales...</div>
+				</Show>
 
 				<Show when={filteredSales().length === 0 && !loading()}>
 					<div class='empty-state'>

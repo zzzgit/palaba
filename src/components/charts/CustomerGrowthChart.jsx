@@ -1,4 +1,4 @@
-import { createSignal, onMount } from 'solid-js'
+import { Show, createSignal, onMount } from 'solid-js'
 import { Bar } from 'solid-chartjs'
 import {
 	BarElement,
@@ -57,8 +57,11 @@ export default function CustomerGrowthChart(){
 	return (
 		<div class='chart-container'>
 			<h3 class='card-title'>Customer Growth</h3>
-			{loading() ? <div class='loading'>Loading chart...</div> : chartData() && <Bar data={chartData()} options={options} />
-			}
+			<Show when={loading()} fallback={<Show when={chartData()}>
+				<Bar data={chartData()} options={options} />
+			</Show>}>
+				<div class='loading'>Loading chart...</div>
+			</Show>
 		</div>
 	)
 }
