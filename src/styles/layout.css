@@ -17,21 +17,21 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    background-color: #f5f5f5;
+    background-color: var(--bg-canvas);
     overflow: hidden;
 }
 
 /* Banner Styles */
 .app-banner {
     position: relative;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(130deg, #0f7f7a 0%, #0b6b66 45%, #c97a2b 100%);
     color: white;
     min-height: 68px;
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 24px rgba(15, 25, 30, 0.18);
 }
 
 .banner-left {
@@ -80,7 +80,7 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.22);
     border: 2px solid white;
     display: flex;
     align-items: center;
@@ -99,8 +99,8 @@
 /* Sidebar Styles */
 .sidebar {
     width: 260px;
-    background-color: #1a1a2e;
-    color: white;
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-ink);
     display: flex;
     flex-direction: column;
     transition: width 0.3s ease;
@@ -135,7 +135,7 @@
 .sidebar-toggle {
     background: none;
     border: none;
-    color: white;
+    color: var(--sidebar-ink);
     cursor: pointer;
     padding: 8px;
     border-radius: 4px;
@@ -156,7 +156,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    color: rgba(255, 255, 255, 0.7);
+    color: var(--sidebar-muted);
     text-decoration: none;
     transition: all 0.2s;
     cursor: pointer;
@@ -165,13 +165,13 @@
 
 .nav-item:hover {
     background-color: rgba(255, 255, 255, 0.05);
-    color: white;
+    color: var(--sidebar-ink);
 }
 
 .nav-item.active {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
-    border-right: 3px solid #1976d2;
+    background-color: rgba(66, 181, 164, 0.12);
+    color: var(--sidebar-ink);
+    border-right: 3px solid var(--accent-300);
 }
 
 .nav-icon {
@@ -190,9 +190,9 @@
 
 /* Main Content Area */
 .holy-grail-content .breadcrumbs {
-    background-color: white;
+    background-color: var(--surface-0);
     padding: 12px 24px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-1);
     display: flex;
     align-items: center;
     gap: 8px;
@@ -200,21 +200,21 @@
 }
 
 .breadcrumbs .breadcrumb-item {
-    color: #666;
+    color: var(--ink-500);
     text-decoration: none;
     cursor: pointer;
 }
 
 .breadcrumbs .breadcrumb-item:hover {
-    color: #1976d2;
+    color: var(--accent-500);
 }
 
 .breadcrumbs .breadcrumb-separator {
-    color: #999;
+    color: var(--ink-500);
 }
 
 .breadcrumbs .breadcrumb-item.active {
-    color: #1976d2;
+    color: var(--accent-500);
     font-weight: 500;
     cursor: default;
 }
