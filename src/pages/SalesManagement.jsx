@@ -1,7 +1,7 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
-import { Button } from '../components/ui/button.jsx'
-import { Input } from '../components/ui/input.jsx'
-import { Select } from '../components/ui/select.jsx'
+import { Button } from '../components/ui/Button.jsx'
+import { Input } from '../components/ui/Input.jsx'
+import { Select } from '../components/ui/Select.jsx'
 import { mockSalesAPI } from '../mocks/mockAPI.js'
 import '../styles/global.css'
 

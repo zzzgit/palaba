@@ -1,10 +1,10 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
-import { Button } from '../components/ui/button.jsx'
-import { Input } from '../components/ui/input.jsx'
-import { Select } from '../components/ui/select.jsx'
+import { Button } from '../components/ui/Button.jsx'
+import { Input } from '../components/ui/Input.jsx'
+import { Select } from '../components/ui/Select.jsx'
 import {
 	Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from '../components/ui/dialog.jsx'
+} from '../components/ui/Dialog.jsx'
 import { createCustomer, deleteCustomerById, getCustomers, updateCustomer } from '../js/api.js'
 import Confirm from '../components/Confirm.jsx'
 import '../styles/global.css'

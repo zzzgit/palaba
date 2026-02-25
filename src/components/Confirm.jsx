@@ -1,8 +1,8 @@
 import { createSignal } from 'solid-js'
 import {
 	Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from './ui/dialog.jsx'
-import { Button } from './ui/button.jsx'
+} from './ui/Dialog.jsx'
+import { Button } from './ui/Button.jsx'
 
 // 全局状态管理
 const [confirmState, setConfirmState] = createSignal({

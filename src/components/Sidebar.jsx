@@ -1,5 +1,5 @@
 import { For, Show, createSignal } from 'solid-js'
-import { Button } from './ui/button.jsx'
+import { Button } from './ui/Button.jsx'
 import '../styles/layout.css'
 
 export default function Sidebar(props){
