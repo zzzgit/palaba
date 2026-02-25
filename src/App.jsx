@@ -1,5 +1,5 @@
 import { render } from 'solid-js/web'
-import { Router, Route } from '@solidjs/router'
+import { Navigate, Route, Router } from '@solidjs/router'
 import MainLayout from './components/MainLayout.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import CustomerManagement from './pages/CustomerManagement.jsx'
@@ -13,10 +13,11 @@ function App(){
 	return (
 		<>
 			<Router>
-				<Route path="/" component={MainLayout}>
-					<Route path="/" component={Dashboard} />
-					<Route path="/customers" component={CustomerManagement} />
-					<Route path="/sales" component={SalesManagement} />
+				<Route path='/' component={MainLayout}>
+					<Route path='/' component={()=> <Navigate href='/dashboard' />} />
+					<Route path='/dashboard' component={Dashboard} />
+					<Route path='/customers' component={CustomerManagement} />
+					<Route path='/sales' component={SalesManagement} />
 				</Route>
 			</Router>
 			<Confirm />

@@ -31,7 +31,7 @@ export default function Sidebar(props){
 
 	const navItems = [
 		{
-			id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/',
+			id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/dashboard',
 		},
 		{
 			id: 'customers', label: 'Customers', icon: '👥', path: '/customers',
@@ -46,8 +46,8 @@ export default function Sidebar(props){
 			<div class='sidebar-header'>
 				<div class='sidebar-logo'>Admin Panel</div>
 				<Button
-					variant="ghost"
-					size="sm"
+					variant='ghost'
+					size='sm'
 					class='sidebar-toggle'
 					onClick={toggleSidebar}
 				>
