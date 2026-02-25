@@ -7,6 +7,12 @@
     box-sizing: border-box;
 }
 
+html {
+    overscroll-behavior: none;
+    overflow-y: scroll;
+    height: 100%;
+}
+
 :root {
     --bg-canvas: #f2ede4;
     --bg-tint: #e9e2d8;
@@ -38,10 +44,14 @@ body {
         radial-gradient(circle at 90% 10%, rgba(201, 122, 43, 0.18), transparent 45%),
         linear-gradient(180deg, rgba(252, 250, 246, 0.65) 0%, rgba(242, 237, 228, 0.9) 60%);
     color: var(--ink-900);
+    overscroll-behavior: none;
+    overflow-y: scroll;
+    height: 100%;
 }
 
 #root {
     min-height: 100vh;
+    overscroll-behavior: none;
 }
 
 /* Utility Classes */
