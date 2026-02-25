@@ -1,5 +1,5 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
-import { mockCustomerAPI } from '../mocks/mockAPI.js'
+import { createCustomer, deleteCustomerById, getCustomers, updateCustomer } from '../js/api.js'
 import '../styles/global.css'
 
 export default function CustomerManagement(){
@@ -12,28 +12,30 @@ export default function CustomerManagement(){
 
 	const [formData, setFormData] = createSignal({
 		name: '',
-		gender: 'MALE',
+		gender: 'M',
 		phone: '',
 		extra: '',
 	})
 
-	onMount(async()=> {
-		await loadCustomers()
+	onMount(()=> {
+		loadCustomers()
 	})
 
-	const loadCustomers = async()=> {
+	const loadCustomers = ()=> {
 		setLoading(true)
-		try {
-			const response = await mockCustomerAPI.getAll()
-			if (response.success){
+		return getCustomers()
+			.then((response)=> {
 				setCustomers(response.data)
 				setFilteredCustomers(response.data)
-			}
-		} catch(error){
-			console.error('Error loading customers:', error)
-		} finally {
-			setLoading(false)
-		}
+				return response
+			})
+			.catch((error)=> {
+				console.error('Error loading customers:', error)
+				throw error
+			})
+			.finally(()=> {
+				setLoading(false)
+			})
 	}
 
 	const handleSearch = (value)=> {
@@ -45,7 +47,12 @@ export default function CustomerManagement(){
 		let filtered = customers()
 
 		if (search){
-			filtered = filtered.filter(c=> c.name.toLowerCase().includes(search.toLowerCase()) || c.phone && c.phone.toLowerCase().includes(search.toLowerCase()))
+			const searchLower = search.toLowerCase()
+			filtered = filtered.filter((c)=> {
+				const nameMatch = c.name.toLowerCase().includes(searchLower)
+				const phoneMatch = c.phone && c.phone.toLowerCase().includes(searchLower)
+				return nameMatch || phoneMatch
+			})
 		}
 
 		setFilteredCustomers(filtered)
@@ -56,14 +63,14 @@ export default function CustomerManagement(){
 			setEditingCustomer(customer)
 			setFormData({
 				name: customer.name,
-				gender: customer.gender || 'MALE',
+				gender: customer.gender || 'M',
 				phone: customer.phone || '',
 				extra: customer.extra || '',
 			})
 		} else {
 			setEditingCustomer(null)
 			setFormData({
-				name: '', gender: 'MALE', phone: '', extra: '',
+				name: '', gender: 'M', phone: '', extra: '',
 			})
 		}
 		setShowModal(true)
@@ -73,41 +80,35 @@ export default function CustomerManagement(){
 		setShowModal(false)
 		setEditingCustomer(null)
 		setFormData({
-			name: '', gender: 'MALE', phone: '', extra: '',
+			name: '', gender: 'M', phone: '', extra: '',
 		})
 	}
 
-	const handleSubmit = async(e)=> {
+	const handleSubmit = (e)=> {
 		e.preventDefault()
-		try {
-			if (editingCustomer()){
-				await mockCustomerAPI.update(editingCustomer().id, formData())
-			} else {
-				await mockCustomerAPI.create(formData())
-			}
-			await loadCustomers()
-			closeModal()
-		} catch(error){
-			console.error('Error saving customer:', error)
-		}
+		const apiCall = editingCustomer() ? updateCustomer(editingCustomer().id, formData()) : createCustomer(formData())
+
+		apiCall
+			.then(()=> loadCustomers())
+			.then(()=> {
+				closeModal()
+				return undefined
+			})
+			.catch((error)=> {
+				console.error('Error saving customer:', error)
+			})
 	}
 
-	const handleDelete = async(id)=> {
-		if (confirm('Are you sure you want to delete this customer?')){
-			try {
-				await mockCustomerAPI.delete(id)
-				await loadCustomers()
-			} catch(error){
-				console.error('Error deleting customer:', error)
-			}
+	const handleDelete = (id)=> {
+		if (window.confirm('Are you sure you want to delete this customer?')){
+			deleteCustomerById(id)
+				.then(()=> {
+					return loadCustomers()
+				})
+				.catch((error)=> {
+					console.error('Error deleting customer:', error)
+				})
 		}
-	}
-
-	const formatCurrency = (value)=> {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD',
-		}).format(value)
 	}
 
 	return (
@@ -234,8 +235,8 @@ export default function CustomerManagement(){
 									value={formData().gender}
 									onChange={e=> setFormData({ ...formData(), gender: e.target.value })}
 								>
-									<option value='MALE'>Male</option>
-									<option value='FEMALE'>Female</option>
+									<option value='M'>Male</option>
+									<option value='F'>Female</option>
 									<option value='OTHER'>Other</option>
 								</select>
 							</div>
