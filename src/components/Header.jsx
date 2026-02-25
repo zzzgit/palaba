@@ -1,7 +1,10 @@
 import { For } from 'solid-js'
+import { useLocation } from '@solidjs/router'
 import '../styles/layout.css'
 
-export default function Header(props){
+export default function Header(){
+	const location = useLocation()
+
 	const getBreadcrumbClass = (crumb)=> {
 		if (crumb.active){
 			return 'breadcrumb-item active'
@@ -10,10 +13,16 @@ export default function Header(props){
 		return 'breadcrumb-item'
 	}
 
+	const getCurrentPage = ()=> {
+		const pathname = location.pathname
+		if (pathname === '/') return 'dashboard'
+		return pathname.slice(1)
+	}
+
 	const getBreadcrumbs = ()=> {
-		const page = props.currentPage || 'dashboard'
+		const page = getCurrentPage()
 		const breadcrumbs = [
-			{ label: 'Home', path: 'dashboard' },
+			{ label: 'Home', path: '/', pageId: 'dashboard' },
 		]
 
 		if (page !== 'dashboard'){
@@ -22,7 +31,7 @@ export default function Header(props){
 				sales: 'Sales Management',
 			}
 			breadcrumbs.push({
-				label: pageLabels[page], path: page, active: true,
+				label: pageLabels[page], path: `/${page}`, pageId: page, active: true,
 			})
 		} else {
 			breadcrumbs[0].active = true
@@ -39,7 +48,7 @@ export default function Header(props){
 						{index() > 0 && <span class='breadcrumb-separator'>/</span>}
 						<a
 							class={getBreadcrumbClass(crumb)}
-							onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
+							href={crumb.path}
 						>
 							{crumb.label}
 						</a>

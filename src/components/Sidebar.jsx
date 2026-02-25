@@ -1,4 +1,5 @@
 import { For, Show, createSignal } from 'solid-js'
+import { A } from '@solidjs/router'
 import { Button } from './ui/Button.jsx'
 import '../styles/layout.css'
 
@@ -30,13 +31,13 @@ export default function Sidebar(props){
 
 	const navItems = [
 		{
-			id: 'dashboard', label: 'Dashboard', icon: '📊',
+			id: 'dashboard', label: 'Dashboard', icon: '📊', path: '/',
 		},
 		{
-			id: 'customers', label: 'Customers', icon: '👥',
+			id: 'customers', label: 'Customers', icon: '👥', path: '/customers',
 		},
 		{
-			id: 'sales', label: 'Sales', icon: '💰',
+			id: 'sales', label: 'Sales', icon: '💰', path: '/sales',
 		},
 	]
 
@@ -56,13 +57,13 @@ export default function Sidebar(props){
 				</Button>
 			</div>
 			<nav class='sidebar-nav'>
-				<For each={navItems}>{item=> <a
+				<For each={navItems}>{item=> <A
 					class={getNavItemClass(item)}
-					onClick={()=> props.onNavigate(item.id)}
+					href={item.path}
 				>
 					<span class='nav-icon'>{item.icon}</span>
 					<span class='nav-text'>{item.label}</span>
-				</a>}</For>
+				</A>}</For>
 			</nav>
 		</aside>
 	)

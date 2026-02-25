@@ -1,9 +1,11 @@
 import { For, createSignal } from 'solid-js'
+import { useLocation } from '@solidjs/router'
 import Sidebar from './Sidebar.jsx'
 import Banner from './Banner.jsx'
 import '../styles/layout.css'
 
 export default function MainLayout(props){
+	const location = useLocation()
 	const [sidebarCollapsed, setSidebarCollapsed] = createSignal(false)
 
 	const getBodyClass = ()=> {
@@ -22,10 +24,18 @@ export default function MainLayout(props){
 		return 'breadcrumb-item'
 	}
 
+	const getCurrentPage = ()=> {
+		const pathname = location.pathname
+		if (pathname === '/'){ return 'dashboard' }
+		return pathname.slice(1)
+	}
+
 	const getBreadcrumbs = ()=> {
-		const page = props.currentPage || 'dashboard'
+		const page = getCurrentPage()
 		const breadcrumbs = [
-			{ label: 'Home', path: 'dashboard' },
+			{
+				label: 'Home', path: '/', pageId: 'dashboard',
+			},
 		]
 
 		if (page !== 'dashboard'){
@@ -34,7 +44,7 @@ export default function MainLayout(props){
 				sales: 'Sales Management',
 			}
 			breadcrumbs.push({
-				label: pageLabels[page], path: page, active: true,
+				label: pageLabels[page], path: `/${page}`, pageId: page, active: true,
 			})
 		} else {
 			breadcrumbs[0].active = true
@@ -48,8 +58,7 @@ export default function MainLayout(props){
 			<Banner />
 			<div class={getBodyClass()}>
 				<Sidebar
-					activePage={props.currentPage}
-					onNavigate={props.onNavigate}
+					activePage={getCurrentPage()}
 					onCollapsedChange={setSidebarCollapsed}
 				/>
 				<main class='holy-grail-content'>
@@ -59,15 +68,16 @@ export default function MainLayout(props){
 								{index() > 0 && <span class='breadcrumb-separator'>/</span>}
 								<a
 									class={getBreadcrumbClass(crumb)}
-									onClick={()=> !crumb.active && props.onNavigate(crumb.path)}
+									href={crumb.path}
 								>
 									{crumb.label}
 								</a>
 							</>}
 						</For>
+						{props.children}
 					</div>
 					<div class='content-wrapper'>
-						{props.children}
+						{/* <Outlet /> */}
 					</div>
 				</main>
 			</div>
