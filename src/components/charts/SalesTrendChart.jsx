@@ -41,6 +41,14 @@ export default function SalesTrendChart(){
 			legend: {
 				display: true,
 				position: 'top',
+				labels: {
+					color: '#cbd5e1',
+					font: {
+						family: "'Inter', sans-serif",
+						size: 13,
+						weight: '500',
+					},
+				},
 			},
 			title: {
 				display: false,
@@ -49,8 +57,29 @@ export default function SalesTrendChart(){
 		scales: {
 			y: {
 				beginAtZero: true,
+				grid: {
+					color: 'rgba(148, 163, 184, 0.1)',
+					drawBorder: false,
+				},
 				ticks: {
+					color: '#94a3b8',
 					callback: value=> '$' + value.toLocaleString(),
+					font: {
+						family: "'Inter', sans-serif",
+						size: 12,
+					},
+				},
+			},
+			x: {
+				grid: {
+					display: false,
+				},
+				ticks: {
+					color: '#94a3b8',
+					font: {
+						family: "'Inter', sans-serif",
+						size: 12,
+					},
 				},
 			},
 		},

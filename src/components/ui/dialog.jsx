@@ -1,15 +1,17 @@
 import { Show } from 'solid-js'
 import { cn } from '../../lib/utils.js'
 
-const Dialog = (props) => {
-	const { open = false, onOpenChange, children } = props
+const Dialog = (props)=> {
+	const {
+		open = false, onOpenChange, children,
+	} = props
 
 	return (
 		<Show when={open}>
 			<div
-				class="fixed inset-0 z-50 bg-black/50 flex items-center justify-center"
-				onClick={(e) => {
-					if (e.target === e.currentTarget && onOpenChange) {
+				class='fixed inset-0 z-50 bg-black/50 flex items-center justify-center'
+				onClick={(e)=> {
+					if (e.target === e.currentTarget && onOpenChange){
 						onOpenChange(false)
 					}
 				}}
@@ -20,16 +22,15 @@ const Dialog = (props) => {
 	)
 }
 
-const DialogContent = (props) => {
-	const { children, class: className, ...rest } = props
+const DialogContent = (props)=> {
+	const {
+		children, class: className, ...rest
+	} = props
 
 	return (
 		<div
-			class={cn(
-				'relative bg-white rounded-lg shadow-lg p-6 w-full max-w-md mx-auto',
-				className,
-			)}
-			onClick={(e) => e.stopPropagation()}
+			class={cn('relative bg-slate-800 rounded-lg shadow-xl p-6 w-full max-w-md mx-auto border border-slate-700', className)}
+			onClick={e=> e.stopPropagation()}
 			{...rest}
 		>
 			{children}
@@ -37,15 +38,14 @@ const DialogContent = (props) => {
 	)
 }
 
-const DialogHeader = (props) => {
-	const { children, class: className, ...rest } = props
+const DialogHeader = (props)=> {
+	const {
+		children, class: className, ...rest
+	} = props
 
 	return (
 		<div
-			class={cn(
-				'mb-4',
-				className,
-			)}
+			class={cn('mb-4', className)}
 			{...rest}
 		>
 			{children}
@@ -53,15 +53,14 @@ const DialogHeader = (props) => {
 	)
 }
 
-const DialogTitle = (props) => {
-	const { children, class: className, ...rest } = props
+const DialogTitle = (props)=> {
+	const {
+		children, class: className, ...rest
+	} = props
 
 	return (
 		<h2
-			class={cn(
-				'text-lg font-semibold',
-				className,
-			)}
+			class={cn('text-lg font-semibold text-slate-100', className)}
 			{...rest}
 		>
 			{children}
@@ -69,15 +68,14 @@ const DialogTitle = (props) => {
 	)
 }
 
-const DialogFooter = (props) => {
-	const { children, class: className, ...rest } = props
+const DialogFooter = (props)=> {
+	const {
+		children, class: className, ...rest
+	} = props
 
 	return (
 		<div
-			class={cn(
-				'mt-6 flex gap-2 justify-end',
-				className,
-			)}
+			class={cn('mt-6 flex gap-2 justify-end', className)}
 			{...rest}
 		>
 			{children}
@@ -85,4 +83,6 @@ const DialogFooter = (props) => {
 	)
 }
 
-export { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter }
+export {
+	Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter,
+}

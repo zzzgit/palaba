@@ -24,14 +24,15 @@
 /* Banner Styles */
 .app-banner {
     position: relative;
-    background: linear-gradient(130deg, #0f7f7a 0%, #0b6b66 45%, #c97a2b 100%);
+    background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+    border-bottom: 1px solid var(--border-200);
     color: white;
     min-height: 68px;
     padding: 16px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 10px 24px rgba(15, 25, 30, 0.18);
+    box-shadow: var(--shadow-1);
 }
 
 .banner-left {
@@ -100,6 +101,7 @@
 .sidebar {
     width: 260px;
     background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--border-200);
     color: var(--sidebar-ink);
     display: flex;
     flex-direction: column;
@@ -115,7 +117,7 @@
 
 .sidebar-header {
     padding: 20px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid var(--border-200);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -143,7 +145,7 @@
 }
 
 .sidebar-toggle:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--surface-2);
 }
 
 .sidebar-nav {
@@ -164,14 +166,14 @@
 }
 
 .nav-item:hover {
-    background-color: rgba(255, 255, 255, 0.05);
-    color: var(--sidebar-ink);
+    background-color: var(--surface-2);
+    color: var(--accent-300);
 }
 
 .nav-item.active {
-    background-color: rgba(66, 181, 164, 0.12);
-    color: var(--sidebar-ink);
-    border-right: 3px solid var(--accent-300);
+    background-color: rgba(59, 130, 246, 0.15);
+    color: var(--accent-300);
+    border-right: 3px solid var(--accent-500);
 }
 
 .nav-icon {
@@ -192,6 +194,7 @@
 .holy-grail-content .breadcrumbs {
     background-color: var(--surface-0);
     padding: 12px 24px;
+    border-bottom: 1px solid var(--border-200);
     box-shadow: var(--shadow-1);
     display: flex;
     align-items: center;

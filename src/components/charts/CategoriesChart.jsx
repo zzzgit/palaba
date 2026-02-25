@@ -37,6 +37,15 @@ export default function CategoriesChart(){
 			legend: {
 				display: true,
 				position: 'right',
+				labels: {
+					color: '#cbd5e1',
+					font: {
+						family: "'Inter', sans-serif",
+						size: 13,
+						weight: '500',
+					},
+					padding: 16,
+				},
 			},
 			title: {
 				display: false,
