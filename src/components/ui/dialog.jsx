@@ -2,21 +2,17 @@ import { Show } from 'solid-js'
 import { cn } from '../../lib/utils.js'
 
 const Dialog = (props)=> {
-	const {
-		open = false, onOpenChange, children,
-	} = props
-
 	return (
-		<Show when={open}>
+		<Show when={props.open}>
 			<div
 				class='fixed inset-0 z-50 bg-black/50 flex items-center justify-center'
 				onClick={(e)=> {
-					if (e.target === e.currentTarget && onOpenChange){
-						onOpenChange(false)
+					if (e.target === e.currentTarget && props.onOpenChange){
+						props.onOpenChange(false)
 					}
 				}}
 			>
-				{children}
+				{props.children}
 			</div>
 		</Show>
 	)
