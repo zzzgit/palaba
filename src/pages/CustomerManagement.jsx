@@ -2,8 +2,11 @@ import { For, Show, createSignal, onMount } from 'solid-js'
 import { Button } from '../components/ui/button.jsx'
 import { Input } from '../components/ui/input.jsx'
 import { Select } from '../components/ui/select.jsx'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '../components/ui/dialog.jsx'
+import {
+	Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
+} from '../components/ui/dialog.jsx'
 import { createCustomer, deleteCustomerById, getCustomers, updateCustomer } from '../js/api.js'
+import Confirm from '../components/Confirm.jsx'
 import '../styles/global.css'
 
 export default function CustomerManagement(){
@@ -104,15 +107,22 @@ export default function CustomerManagement(){
 	}
 
 	const handleDelete = (id)=> {
-		if (window.confirm('Are you sure you want to delete this customer?')){
-			deleteCustomerById(id)
-				.then(()=> {
+		Confirm.it('Are you sure you want to delete this customer?')
+			.then((confirmed)=> {
+				if (confirmed){
+					return deleteCustomerById(id)
+				}
+				return Promise.resolve()
+			})
+			.then((result)=> {
+				if (result !== undefined){
 					return loadCustomers()
-				})
-				.catch((error)=> {
-					console.error('Error deleting customer:', error)
-				})
-		}
+				}
+				return Promise.resolve()
+			})
+			.catch((error)=> {
+				console.error('Error deleting customer:', error)
+			})
 	}
 
 	return (
@@ -156,15 +166,15 @@ export default function CustomerManagement(){
 								<td>{new Date(customer.createdAt).toLocaleDateString()}</td>
 								<td class='table-actions-cell'>
 									<Button
-										variant="secondary"
-										size="sm"
+										variant='secondary'
+										size='sm'
 										onClick={()=> openModal(customer)}
 									>
 										Edit
 									</Button>
 									<Button
-										variant="secondary"
-										size="sm"
+										variant='secondary'
+										size='sm'
 										onClick={()=> handleDelete(customer.id)}
 									>
 										Delete
