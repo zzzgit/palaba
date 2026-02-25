@@ -74,10 +74,9 @@ export default function MainLayout(props){
 								</a>
 							</>}
 						</For>
-						{props.children}
 					</div>
 					<div class='content-wrapper'>
-						{/* <Outlet /> */}
+						{props.children}
 					</div>
 				</main>
 			</div>
