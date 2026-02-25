@@ -3,7 +3,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440001',
 		name: 'John Smith',
-		gender: 'MALE',
+		gender: 'M',
 		phone: '+1-555-0101',
 		extra: 'VIP Customer',
 		createdAt: '2024-01-15T10:00:00Z',
@@ -13,7 +13,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440002',
 		name: 'Sarah Johnson',
-		gender: 'FEMALE',
+		gender: 'F',
 		phone: '+1-555-0102',
 		extra: null,
 		createdAt: '2024-02-20T14:20:00Z',
@@ -23,7 +23,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440003',
 		name: 'Michael Brown',
-		gender: 'MALE',
+		gender: 'M',
 		phone: null,
 		extra: 'Imported from legacy system',
 		createdAt: '2023-11-10T08:45:00Z',
@@ -33,7 +33,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440004',
 		name: 'Emily Davis',
-		gender: 'FEMALE',
+		gender: 'F',
 		phone: '+1-555-0104',
 		extra: 'Bulk orders allowed',
 		createdAt: '2024-03-05T12:30:00Z',
@@ -43,7 +43,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440005',
 		name: 'David Wilson',
-		gender: 'MALE',
+		gender: 'M',
 		phone: '+1-555-0105',
 		extra: null,
 		createdAt: '2024-01-22T09:00:00Z',
@@ -53,7 +53,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440006',
 		name: 'Lisa Anderson',
-		gender: 'FEMALE',
+		gender: 'F',
 		phone: '+1-555-0106',
 		extra: 'First time buyer',
 		createdAt: '2024-03-28T11:15:00Z',
@@ -63,7 +63,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440007',
 		name: 'Robert Taylor',
-		gender: 'MALE',
+		gender: 'M',
 		phone: '+1-555-0107',
 		extra: 'Executive account',
 		createdAt: '2023-12-15T10:30:00Z',
@@ -73,7 +73,7 @@ export const customersData = [
 	{
 		id: '550e8400-e29b-41d4-a716-446655440008',
 		name: 'Jennifer Martinez',
-		gender: 'FEMALE',
+		gender: 'F',
 		phone: '+1-555-0108',
 		extra: null,
 		createdAt: '2024-02-10T15:45:00Z',
