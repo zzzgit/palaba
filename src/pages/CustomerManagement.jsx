@@ -1,4 +1,5 @@
 import { For, Show, createSignal, onMount } from 'solid-js'
+import { formatDate } from '../lib/utils.js'
 import { Button } from '../components/ui/Button.jsx'
 import { Input } from '../components/ui/Input.jsx'
 import { Select } from '../components/ui/Select.jsx'
@@ -163,7 +164,7 @@ export default function CustomerManagement(){
 								<td>{customer.gender || '-'}</td>
 								<td>{customer.phone || '-'}</td>
 								<td>{customer.extra || '-'}</td>
-								<td>{new Date(customer.createdAt).toLocaleDateString()}</td>
+								<td>{formatDate(customer.createdAt)}</td>
 								<td class='table-actions-cell'>
 									<Button
 										variant='secondary'
