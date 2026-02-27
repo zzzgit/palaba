@@ -3,9 +3,7 @@ import { formatDate } from '../lib/utils.js'
 import { Button } from '../components/ui/Button.jsx'
 import { Input } from '../components/ui/Input.jsx'
 import { Select } from '../components/ui/Select.jsx'
-import {
-	Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from '../components/ui/Dialog.jsx'
+import CustomerDialog from '../components/CustomerDialog.jsx'
 import { createCustomer, deleteCustomerById, getCustomers, updateCustomer } from '../js/api.js'
 import Confirm from '../components/Confirm.jsx'
 import '../styles/global.css'
@@ -197,83 +195,15 @@ export default function CustomerManagement(){
 				</Show>
 			</div>
 
-			{/* Modal */}
-			<Dialog open={showModal()} onOpenChange={setShowModal}>
-				<DialogContent>
-					<DialogHeader>
-						<DialogTitle>
-							<Show when={editingCustomer()} fallback='Add New Customer'>
-								Edit Customer
-							</Show>
-						</DialogTitle>
-					</DialogHeader>
-					<form onSubmit={handleSubmit}>
-						<div style={{ 'margin-bottom': '16px' }}>
-							<label style={{
-								display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
-							}}>
-								Name
-							</label>
-							<Input
-								type='text'
-								value={formData().name}
-								onInput={e=> setFormData({ ...formData(), name: e.target.value })}
-								required
-							/>
-						</div>
-						<div style={{ 'margin-bottom': '16px' }}>
-							<label style={{
-								display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
-							}}>
-								Gender
-							</label>
-							<Select
-								value={formData().gender}
-								onChange={e=> setFormData({ ...formData(), gender: e.target.value })}
-							>
-								<option value='M'>Male</option>
-								<option value='F'>Female</option>
-								<option value='OTHER'>Other</option>
-							</Select>
-						</div>
-						<div style={{ 'margin-bottom': '16px' }}>
-							<label style={{
-								display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
-							}}>
-								Phone
-							</label>
-							<Input
-								type='tel'
-								value={formData().phone}
-								onInput={e=> setFormData({ ...formData(), phone: e.target.value })}
-							/>
-						</div>
-						<div style={{ 'margin-bottom': '24px' }}>
-							<label style={{
-								display: 'block', 'margin-bottom': '8px', 'font-weight': '500',
-							}}>
-								Extra Info
-							</label>
-							<textarea
-								class='w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
-								style={{ 'min-height': '80px' }}
-								value={formData().extra}
-								onInput={e=> setFormData({ ...formData(), extra: e.target.value })}
-							/>
-						</div>
-						<DialogFooter>
-							<Button variant='outline' onClick={closeModal}>
-								Cancel
-							</Button>
-							<Button type='submit'>
-								<Show when={editingCustomer()} fallback='Create'>
-									Update
-								</Show>
-							</Button>
-						</DialogFooter>
-					</form>
-				</DialogContent>
-			</Dialog>
+			<CustomerDialog
+				open={showModal()}
+				onOpenChange={setShowModal}
+				editingCustomer={editingCustomer}
+				formData={formData}
+				setFormData={setFormData}
+				handleSubmit={handleSubmit}
+				closeModal={closeModal}
+			/>
 		</div>
 	)
 }
