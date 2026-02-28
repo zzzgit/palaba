@@ -1,21 +1,20 @@
 # Copilot Instructions
 
-This project is a Solid.js Admin Dashboard.
+This project is a React Admin Dashboard using Chakra UI.
 
 ## Table of Contents
 1. [Project Details](#project-details)
 2. [Coding Standards](#coding-standards)
-3. [Solid.js Specific Guidelines](#solidjs-specific-guidelines)
 4. [JSX & Conditional Rendering](#jsx--conditional-rendering)
 5. [Project Structure](#project-structure)
 6. [Platform Specifics & Environment](#platform-specifics--environment)
 7. [Best Practices](#best-practices)
 
 ## Project Details
-- **Framework**: Solid.js
+- **Framework**: React
 - **Language**: Modern JavaScript (ES6+) - NO TypeScript
 - **Build Tool**: Vite
-- **UI Library**: solid-ui
+- **UI Library**: Chakra UI
 - **Styling**: Standard CSS - NO PostCSS, NO Sass/SCSS
 - **Data Fetching**: Native fetch API - NO Axios
 - **Data Visualization**: Chart.js
@@ -37,69 +36,49 @@ This project is a Solid.js Admin Dashboard.
 - Component names should use PascalCase (e.g., `Dashboard`, `CustomerTable`).
 - Private or utility functions should be prefixed with underscore if needed.
 
-## Solid.js Specific Guidelines
+## React + Chakra UI Specific Guidelines
 
-### Signals and Reactivity
-- Use **Signals** for reactive state management: `const [value, setValue] = createSignal(initialValue)`.
-- Use **Derived signals** with `createMemo()` for computed values that depend on other signals.
-- Use **Effects** with `createEffect()` for side effects that need to run when dependencies change.
-- Never use `watch` or external state management libraries; Solid.js signals are sufficient.
+### State Management
+- Use React's built-in `useState`, `useReducer`, and `useContext` for state management.
+- For derived/computed state, use `useMemo()`.
+- For side effects, use `useEffect()`.
+- Avoid external state management libraries unless absolutely necessary.
 
 ### Component Structure
 - Components should be **pure functions** that return JSX.
 - Keep components focused on a single responsibility.
 - Extract reusable logic into separate utility functions or custom hooks.
-- Use `createResource()` for async data fetching within components.
+- Use custom hooks for reusable logic and side effects.
 
 ## JSX & Conditional Rendering
 
-### Conditional Rendering - Use Control Flow Components
+### Conditional Rendering
 
-**❌ DO NOT use ternary operators in JSX:**
+**✅ Use logical operators or ternary expressions in JSX:**
 ```javascript
-<div>
-  {isLoading ? <Loading /> : <Content />}
-</div>
+{isLoading ? <Loading /> : <Content />}
 ```
 
-**✅ DO use Solid.js control flow components:**
+**✅ For multiple conditions:**
 ```javascript
-import { Show, Switch, Match } from 'solid-js';
-
-// For simple conditional rendering
-<Show when={isLoading} fallback={<Content />}>
-  <Loading />
-</Show>
-
-// For multiple conditions
-<Switch fallback={<Default />}>
-  <Match when={status === 'loading'}><Loading /></Match>
-  <Match when={status === 'error'}><Error /></Match>
-  <Match when={status === 'success'}><Content /></Match>
-</Switch>
-
-// For list rendering with fallback
-<Show when={items().length} fallback={<EmptyState />}>
-  <For each={items()}>
-    {(item) => <ItemComponent item={item} />}
-  </For>
-</Show>
+{status === 'loading' && <Loading />}
+{status === 'error' && <Error />}
+{status === 'success' && <Content />}
 ```
 
 ### List Rendering
-- Always use the `<For>` component for rendering lists of items.
+- Always use `.map()` for rendering lists of items in JSX.
 - Provide a unique `key` prop for each item in the list.
-- Never use `.map()` directly in JSX for rendering lists.
 
 ```javascript
-<For each={items()} fallback={<p>No items</p>}>
-  {(item) => <Item item={item} />}
-</For>
+{items.length === 0 ? <p>No items</p> : items.map(item => (
+  <Item key={item.id} item={item} />
+))}
 ```
 
 ## Project Structure
 
-- **src/components/**: Reusable UI components (Banner, Header, Sidebar, MainLayout)
+- **src/components/**: Reusable UI components (Banner, Header, Sidebar, MainLayout, Chakra UI wrappers)
 - **src/components/charts/**: Data visualization components using Chart.js
 - **src/pages/**: Page-level components (Dashboard, CustomerManagement, SalesManagement)
 - **src/mocks/**: Mock API responses and test data (mockAPI.js, mockData.js)
@@ -125,7 +104,7 @@ import { Show, Switch, Match } from 'solid-js';
 - Use consistent file naming conventions (PascalCase for components, camelCase for utilities).
 
 ### Performance
-- Use `createMemo()` to prevent unnecessary re-computations.
+- Use `useMemo()` to prevent unnecessary re-computations.
 - Wrap expensive calculations in memoized functions.
 - Avoid creating new functions/objects in render methods.
 
@@ -138,6 +117,7 @@ import { Show, Switch, Match } from 'solid-js';
 ### CSS & Styling
 - Use standard CSS only; no preprocessors.
 - Import global styles in the main App component.
+- Use Chakra UI's style props for most component styling.
 - Keep component-specific styles in the same directory as the component or in `global.css`.
 - Use meaningful CSS class names and avoid deep nesting.
 
