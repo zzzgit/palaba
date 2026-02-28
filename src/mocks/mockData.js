@@ -173,8 +173,8 @@ export const salesTrendData = {
 		{
 			label: 'Revenue',
 			data: [12000, 19000, 15000, 25000, 22000, 30000],
-			borderColor: '#3b82f6',
-			backgroundColor: 'rgba(59, 130, 246, 0.1)',
+			borderColor: '#1152d4',
+			backgroundColor: 'rgba(17, 82, 212, 0.08)',
 			tension: 0.4,
 			fill: true,
 		},
@@ -187,7 +187,8 @@ export const customerGrowthData = {
 		{
 			label: 'New Customers',
 			data: [15, 28, 22, 35, 30, 42],
-			backgroundColor: '#10b981',
+			backgroundColor: '#1152d4',
+			borderRadius: 4,
 		},
 	],
 }
@@ -199,11 +200,11 @@ export const categoriesData = {
 			label: 'Sales by Category',
 			data: [35, 25, 20, 10, 10],
 			backgroundColor: [
-				'#3b82f6',
-				'#8b5cf6',
-				'#10b981',
-				'#f59e0b',
-				'#06b6d4',
+				'#1152d4',
+				'#60a5fa',
+				'#94a3b8',
+				'#cbd5e1',
+				'#e2e8f0',
 			],
 		},
 	],

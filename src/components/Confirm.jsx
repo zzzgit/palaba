@@ -1,80 +1,60 @@
-import { createSignal } from 'solid-js'
+import { useEffect, useRef, useState } from 'react'
 import {
-	Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle,
-} from './ui/Dialog.jsx'
-import { Button } from './ui/Button.jsx'
+	Button,
+	Modal,
+	ModalBody,
+	ModalContent,
+	ModalFooter,
+	ModalHeader,
+	ModalOverlay,
+} from '@chakra-ui/react'
 
-// 全局状态管理
-const [confirmState, setConfirmState] = createSignal({
-	open: false,
-	message: '',
-	resolve: null,
-})
+let _show = null
 
-// Confirm组件
 const Confirm = ()=> {
-	const handleConfirm = ()=> {
-		const state = confirmState()
-		if (state.resolve){
-			state.resolve(true)
-		}
-		setConfirmState({
-			open: false,
-			message: '',
-			resolve: null,
+	const [open, setOpen] = useState(false)
+	const [message, setMessage] = useState('')
+	const resolveRef = useRef(null)
+
+	useEffect(()=> {
+		_show = (msg)=> new Promise((resolve)=> {
+			resolveRef.current = resolve
+			setMessage(msg || '確定要執行此操作嗎？')
+			setOpen(true)
 		})
+		return ()=> { _show = null }
+	}, [])
+
+	const handleConfirm = ()=> {
+		resolveRef.current?.(true)
+		resolveRef.current = null
+		setOpen(false)
 	}
 
 	const handleCancel = ()=> {
-		const state = confirmState()
-		if (state.resolve){
-			state.resolve(false)
-		}
-		setConfirmState({
-			open: false,
-			message: '',
-			resolve: null,
-		})
+		resolveRef.current?.(false)
+		resolveRef.current = null
+		setOpen(false)
 	}
 
 	return (
-		<Dialog
-			open={confirmState().open}
-			onOpenChange={(open)=> {
-				if (!open){
-					handleCancel()
-				}
-			}}
-		>
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>確認</DialogTitle>
-				</DialogHeader>
-				<div class='text-slate-300 py-4'>
-					{confirmState().message}
-				</div>
-				<DialogFooter>
-					<Button variant='secondary' onClick={handleCancel}>
-						取消
-					</Button>
-					<Button variant='default' onClick={handleConfirm}>
-						確定
-					</Button>
-				</DialogFooter>
-			</DialogContent>
-		</Dialog>
+		<Modal isOpen={open} onClose={handleCancel} isCentered size='sm'>
+			<ModalOverlay bg='blackAlpha.400' backdropFilter='blur(4px)' />
+			<ModalContent>
+				<ModalHeader>確認</ModalHeader>
+				<ModalBody>{message}</ModalBody>
+				<ModalFooter gap={2}>
+					<Button variant='outline' onClick={handleCancel}>取消</Button>
+					<Button colorScheme='red' onClick={handleConfirm}>確定</Button>
+				</ModalFooter>
+			</ModalContent>
+		</Modal>
 	)
 }
 
-// 靜態方法
 Confirm.it = (message)=> {
-	return new Promise((resolve)=> {
-		setConfirmState({
-			open: true,
-			message: message || '確定要執行此操作嗎？',
-			resolve,
-		})
-	})
+	if (_show) return _show(message)
+	return Promise.resolve(false)
 }
 
 export default Confirm

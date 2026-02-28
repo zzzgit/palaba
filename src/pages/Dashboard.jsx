@@ -1,69 +1,66 @@
-import { Show, createSignal, onMount } from 'solid-js'
+import { useEffect, useState } from 'react'
 import SalesTrendChart from '../components/charts/SalesTrendChart.jsx'
 import CustomerGrowthChart from '../components/charts/CustomerGrowthChart.jsx'
 import CategoriesChart from '../components/charts/CategoriesChart.jsx'
 import { mockDashboardAPI } from '../mocks/mockAPI.js'
-import '../styles/global.css'
+
+const formatCurrency = (value)=> new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+
+const statCards = (stats)=> [
+	{ label: 'Total Revenue', value: formatCurrency(stats.totalRevenue), icon: 'payments', trend: '+12.5%', positive: true },
+	{ label: 'Total Customers', value: stats.totalCustomers, icon: 'person_add', trend: '+8.3%', positive: true },
+	{ label: 'Total Orders', value: stats.totalOrders, icon: 'shopping_cart', trend: '+15.2%', positive: true },
+	{ label: 'Avg Order Value', value: formatCurrency(stats.avgOrderValue), icon: 'show_chart', trend: '-2.1%', positive: false },
+]
 
 export default function Dashboard(){
-	const [stats, setStats] = createSignal(null)
-	const [loading, setLoading] = createSignal(true)
+	const [stats, setStats] = useState(null)
+	const [loading, setLoading] = useState(true)
 
-	onMount(async()=> {
-		try {
-			const response = await mockDashboardAPI.getStats()
-			if (response.success){
-				setStats(response.data)
-			}
-		} catch(error){
-			console.error('Error loading dashboard stats:', error)
-		} finally {
-			setLoading(false)
-		}
-	})
+	useEffect(()=> {
+		mockDashboardAPI.getStats()
+			.then((response)=> { if (response.success) setStats(response.data) })
+			.catch((error)=> console.error('Error loading dashboard stats:', error))
+			.finally(()=> setLoading(false))
+	}, [])
 
-	const formatCurrency = (value)=> {
-		return new Intl.NumberFormat('en-US', {
-			style: 'currency',
-			currency: 'USD',
-		}).format(value)
+	if (loading){
+		return <div className='page-content'><div className='loading'>Loading dashboard...</div></div>
 	}
 
 	return (
-		<div class='container'>
-			<Show when={loading()} fallback={<>
-				<div class='stats-grid'>
-					<div class='stat-card'>
-						<div class='stat-label'>Total Revenue</div>
-						<div class='stat-value'>{formatCurrency(stats().totalRevenue)}</div>
-						<div class='stat-change positive'>↑ 12.5%</div>
-					</div>
-					<div class='stat-card'>
-						<div class='stat-label'>Total Customers</div>
-						<div class='stat-value'>{stats().totalCustomers}</div>
-						<div class='stat-change positive'>↑ 8.3%</div>
-					</div>
-					<div class='stat-card'>
-						<div class='stat-label'>Total Orders</div>
-						<div class='stat-value'>{stats().totalOrders}</div>
-						<div class='stat-change positive'>↑ 15.2%</div>
-					</div>
-					<div class='stat-card'>
-						<div class='stat-label'>Avg Order Value</div>
-						<div class='stat-value'>{formatCurrency(stats().avgOrderValue)}</div>
-						<div class='stat-change negative'>↓ 2.1%</div>
-					</div>
-				</div>
+		<div className='page-content'>
+			<div className='page-header'>
+				<h2 className='page-title'>Dashboard</h2>
+				<p className='page-subtitle'>Welcome back, here's what's happening today.</p>
+			</div>
 
-				<SalesTrendChart />
+			<div className='stats-grid'>
+				{statCards(stats).map(card=> (
+					<div key={card.label} className='stat-card'>
+						<div className='stat-card-top'>
+							<div className='stat-icon'>
+								<span className='material-symbols-outlined'>{card.icon}</span>
+							</div>
+							<span className={`stat-trend ${card.positive ? 'positive' : 'negative'}`}>
+								{card.trend}
+								<span className='material-symbols-outlined' style={{ fontSize: '16px' }}>
+									{card.positive ? 'trending_up' : 'trending_down'}
+								</span>
+							</span>
+						</div>
+						<div className='stat-label'>{card.label}</div>
+						<div className='stat-value'>{card.value}</div>
+					</div>
+				))}
+			</div>
 
-				<div class='charts-grid'>
-					<CustomerGrowthChart />
-					<CategoriesChart />
-				</div>
-			</>}>
-				<div class='loading'>Loading dashboard...</div>
-			</Show>
+			<SalesTrendChart />
+
+			<div className='charts-grid'>
+				<CustomerGrowthChart />
+				<CategoriesChart />
+			</div>
 		</div>
 	)
 }

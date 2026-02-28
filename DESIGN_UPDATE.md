@@ -54,7 +54,6 @@
 - ✅ `src/components/ui/input.jsx` - 輸入框
 - ✅ `src/components/ui/select.jsx` - 下拉選擇
 - ✅ `src/components/ui/dialog.jsx` - 對話框
-- ✅ `src/components/ui/card.jsx` - 卡片組件
 - 更新內容：
   - 深色背景色
   - 深色邊框
