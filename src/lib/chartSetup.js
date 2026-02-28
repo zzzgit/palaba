@@ -12,15 +12,4 @@ import {
 	Tooltip,
 } from 'chart.js'
 
-ChartJS.register(
-	ArcElement,
-	BarElement,
-	CategoryScale,
-	Filler,
-	Legend,
-	LineElement,
-	LinearScale,
-	PointElement,
-	Title,
-	Tooltip,
-)
+ChartJS.register(ArcElement, BarElement, CategoryScale, Filler, Legend, LineElement, LinearScale, PointElement, Title, Tooltip)

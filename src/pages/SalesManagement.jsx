@@ -1,16 +1,18 @@
 import { useEffect, useState } from 'react'
-import { ButtonGroup, Flex, IconButton, Pagination, Table, Text } from '@chakra-ui/react'
+import {
+	ButtonGroup, Flex, IconButton, Pagination, Table, Text,
+} from '@chakra-ui/react'
 import { mockSalesAPI } from '../mocks/mockAPI.js'
 
 const PAGE_SIZE = 10
 
-const formatCurrency = (value)=> new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
+const formatCurrency = value=> new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
 
 const statusBadge = {
 	completed: 'badge-success',
 	processing: 'badge-warning',
-	pending:    'badge-info',
-	cancelled:  'badge-error',
+	pending: 'badge-info',
+	cancelled: 'badge-error',
 }
 
 export default function SalesManagement(){
@@ -37,10 +39,10 @@ export default function SalesManagement(){
 
 	const applyFilters = (search, status, source)=> {
 		let filtered = source
-		if (search) filtered = filtered.filter(s=>
-			s.customerName.toLowerCase().includes(search.toLowerCase()) || s.id.toString().includes(search)
-		)
-		if (status !== 'all') filtered = filtered.filter(s=> s.status === status)
+		if (search){
+			filtered = filtered.filter(s=> s.customerName.toLowerCase().includes(search.toLowerCase()) || s.id.toString().includes(search))
+		}
+		if (status !== 'all'){ filtered = filtered.filter(s=> s.status === status) }
 		setFilteredSales(filtered)
 		setCurrentPage(1)
 	}
@@ -49,8 +51,9 @@ export default function SalesManagement(){
 	const handleStatusFilter = (value)=> { setStatusFilter(value); applyFilters(searchTerm, value, sales) }
 
 	const handleUpdateStatus = async(id, newStatus)=> {
-		try { await mockSalesAPI.updateStatus(id, newStatus); await loadSales() }
-		catch(error){ console.error('Error updating status:', error) }
+		try { await mockSalesAPI.updateStatus(id, newStatus); await loadSales() } catch(error){
+			console.error('Error updating status:', error)
+		}
 	}
 
 	const totalRevenue = filteredSales.reduce((sum, s)=> sum + s.amount, 0)
@@ -67,7 +70,6 @@ export default function SalesManagement(){
 				<h2 className='page-title'>Sales Management</h2>
 				<p className='page-subtitle'>Track orders, revenue, and transaction statuses.</p>
 			</div>
-
 			<div className='stats-grid' style={{ gridTemplateColumns: 'repeat(3, 1fr)' }}>
 				<div className='stat-card'>
 					<div className='stat-card-top'>
@@ -76,7 +78,9 @@ export default function SalesManagement(){
 						</div>
 					</div>
 					<div className='stat-label'>Total Orders</div>
-					<div className='stat-value'>{filteredSales.length}</div>
+					<div className='stat-value'>
+						{filteredSales.length}
+					</div>
 				</div>
 				<div className='stat-card'>
 					<div className='stat-card-top'>
@@ -85,7 +89,9 @@ export default function SalesManagement(){
 						</div>
 					</div>
 					<div className='stat-label'>Total Revenue</div>
-					<div className='stat-value'>{formatCurrency(totalRevenue)}</div>
+					<div className='stat-value'>
+						{formatCurrency(totalRevenue)}
+					</div>
 				</div>
 				<div className='stat-card'>
 					<div className='stat-card-top'>
@@ -94,10 +100,11 @@ export default function SalesManagement(){
 						</div>
 					</div>
 					<div className='stat-label'>Average Order</div>
-					<div className='stat-value'>{formatCurrency(avgOrder)}</div>
+					<div className='stat-value'>
+						{formatCurrency(avgOrder)}
+					</div>
 				</div>
 			</div>
-
 			<div className='table-container'>
 				<div className='table-header'>
 					<span className='table-title'>Sales Transactions</span>
@@ -106,16 +113,16 @@ export default function SalesManagement(){
 							<span className='material-symbols-outlined search-icon'>search</span>
 							<input
 								className='search-box'
-								type='text'
-								placeholder='Search by customer or order ID...'
-								value={searchTerm}
 								onChange={e=> handleSearch(e.target.value)}
+								placeholder='Search by customer or order ID...'
+								type='text'
+								value={searchTerm}
 							/>
 						</div>
 						<select
 							className='filter-select'
-							value={statusFilter}
 							onChange={e=> handleStatusFilter(e.target.value)}
+							value={statusFilter}
 						>
 							<option value='all'>All Status</option>
 							<option value='completed'>Completed</option>
@@ -124,10 +131,8 @@ export default function SalesManagement(){
 						</select>
 					</div>
 				</div>
-
-				{loading ? (
-					<div className='loading'>Loading sales...</div>
-				) : (
+				{loading && <div className='loading'>Loading sales...</div>}
+				{ !loading && (
 					<Table.ScrollArea maxH='calc(100vh - 500px)'>
 						<Table.Root size='sm' stickyHeader>
 							<Table.Header>
@@ -144,11 +149,22 @@ export default function SalesManagement(){
 							<Table.Body>
 								{pagedSales.map(sale=> (
 									<Table.Row key={sale.id}>
-										<Table.Cell color='var(--ink-500)' fontWeight='500'>#{sale.id}</Table.Cell>
-										<Table.Cell fontWeight='600'>{sale.customerName}</Table.Cell>
-										<Table.Cell color='var(--ink-600)'>{sale.orderDate}</Table.Cell>
-										<Table.Cell color='var(--ink-600)'>{sale.items}</Table.Cell>
-										<Table.Cell fontWeight='600'>{formatCurrency(sale.amount)}</Table.Cell>
+										<Table.Cell color='var(--ink-500)' fontWeight='500'>
+											#
+											{sale.id}
+										</Table.Cell>
+										<Table.Cell fontWeight='600'>
+											{sale.customerName}
+										</Table.Cell>
+										<Table.Cell color='var(--ink-600)'>
+											{sale.orderDate}
+										</Table.Cell>
+										<Table.Cell color='var(--ink-600)'>
+											{sale.items}
+										</Table.Cell>
+										<Table.Cell fontWeight='600'>
+											{formatCurrency(sale.amount)}
+										</Table.Cell>
 										<Table.Cell>
 											<span className={`badge ${statusBadge[sale.status] || 'badge-neutral'}`}>
 												{sale.status}
@@ -160,6 +176,7 @@ export default function SalesManagement(){
 													<button
 														className='btn btn-secondary btn-sm'
 														onClick={()=> handleUpdateStatus(sale.id, 'processing')}
+														type='button'
 													>
 														Process
 													</button>
@@ -168,6 +185,7 @@ export default function SalesManagement(){
 													<button
 														className='btn btn-primary btn-sm'
 														onClick={()=> handleUpdateStatus(sale.id, 'completed')}
+														type='button'
 													>
 														Complete
 													</button>
@@ -180,7 +198,6 @@ export default function SalesManagement(){
 						</Table.Root>
 					</Table.ScrollArea>
 				)}
-
 				{filteredSales.length === 0 && !loading && (
 					<div className='empty-state'>
 						<div className='empty-state-icon'>
@@ -189,26 +206,36 @@ export default function SalesManagement(){
 						<div className='empty-state-text'>No sales transactions found</div>
 					</div>
 				)}
-
 				{!loading && totalPages > 1 && (
-					<Flex align='center' justify='space-between' px={4} py={3} borderTop='1px solid' borderColor='gray.200'>
-						<Text fontSize='sm' color='gray.500'>
-							Showing {startItem}–{endItem} of {filteredSales.length}
+					<Flex
+						align='center' borderColor='gray.200' borderTop='1px solid' justify='space-between'
+						px={4} py={3}
+					>
+						<Text color='gray.500' fontSize='sm'>
+							Showing
+							{' '}
+							{startItem}
+							–
+							{endItem}
+							{' '}
+							of
+							{' '}
+							{filteredSales.length}
 						</Text>
 						<Pagination.Root
 							count={filteredSales.length}
-							pageSize={PAGE_SIZE}
-							page={currentPage}
 							onPageChange={e=> setCurrentPage(e.page)}
+							page={currentPage}
+							pageSize={PAGE_SIZE}
 						>
-							<ButtonGroup variant='ghost' size='sm'>
+							<ButtonGroup size='sm' variant='ghost'>
 								<Pagination.PrevTrigger asChild>
 									<IconButton aria-label='Previous page'>
 										<span className='material-symbols-outlined' style={{ fontSize: '20px' }}>chevron_left</span>
 									</IconButton>
 								</Pagination.PrevTrigger>
 								<Pagination.Items
-									render={(page)=> (
+									render={page=> (
 										<IconButton variant={{ base: 'ghost', _selected: 'outline' }}>
 											{page.value}
 										</IconButton>

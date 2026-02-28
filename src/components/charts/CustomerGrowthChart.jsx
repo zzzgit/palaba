@@ -12,7 +12,9 @@ const options = {
 			position: 'top',
 			labels: {
 				color: '#475569',
-				font: { family: "'Inter', sans-serif", size: 13, weight: '500' },
+				font: {
+					family: '\'Inter\', sans-serif', size: 13, weight: '500',
+				},
 			},
 		},
 		title: { display: false },
@@ -24,12 +26,12 @@ const options = {
 			ticks: {
 				stepSize: 10,
 				color: '#94a3b8',
-				font: { family: "'Inter', sans-serif", size: 12 },
+				font: { family: '\'Inter\', sans-serif', size: 12 },
 			},
 		},
 		x: {
 			grid: { display: false },
-			ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif", size: 12 } },
+			ticks: { color: '#94a3b8', font: { family: '\'Inter\', sans-serif', size: 12 } },
 		},
 	},
 }
@@ -39,19 +41,24 @@ export default function CustomerGrowthChart(){
 	const [loading, setLoading] = useState(true)
 
 	useEffect(()=> {
+		// eslint-disable-next-line promise/catch-or-return
 		mockDashboardAPI.getCustomerGrowth()
-			.then((response)=> { if (response.success) setChartData(response.data) })
-			.catch((error)=> console.error('Error loading customer growth:', error))
+			.then((response)=> {
+				if (response.success){
+					setChartData(response.data)
+				}
+				return null
+			})
+			.catch(error=> console.error('Error loading customer growth:', error))
 			.finally(()=> setLoading(false))
 	}, [])
 
 	return (
 		<div className='chart-container'>
-			<div className='chart-header'><h3 className='chart-title'>Customer Growth</h3></div>
-			{loading
-				? <div className='loading'>Loading chart...</div>
-				: chartData && <Bar data={chartData} options={options} />
-			}
+			<div className='chart-header'>
+				<h3 className='chart-title'>Customer Growth</h3>
+			</div>
+			{loading ? <div className='loading'>Loading chart...</div> : chartData && <Bar data={chartData} options={options} />}
 		</div>
 	)
 }

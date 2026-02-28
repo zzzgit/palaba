@@ -58,13 +58,13 @@ const doDelete = (endpoint, ids)=> {
 				throw new Error(errorMsg)
 			})
 		}
-		
+
 		// For successful responses, check if there's content before parsing
 		const contentType = response.headers.get('content-type')
-		if (response.status === 204 || !contentType || !contentType.includes('application/json')) {
+		if (response.status === 204 || !contentType || !contentType.includes('application/json')){
 			return { success: true }
 		}
-		
+
 		return response.json()
 	}).catch((error)=> {
 		console.error('Error in DELETE request:', error)

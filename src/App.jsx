@@ -9,11 +9,11 @@ export default function App(){
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path='/' element={<MainLayout />}>
-					<Route index element={<Navigate to='/dashboard' replace />} />
-					<Route path='dashboard' element={<Dashboard />} />
-					<Route path='customers' element={<CustomerManagement />} />
-					<Route path='sales' element={<SalesManagement />} />
+				<Route element={<MainLayout />} path='/'>
+					<Route element={<Navigate replace to='/dashboard' />} index />
+					<Route element={<Dashboard />} path='dashboard' />
+					<Route element={<CustomerManagement />} path='customers' />
+					<Route element={<SalesManagement />} path='sales' />
 				</Route>
 			</Routes>
 			<Confirm />

@@ -8,7 +8,9 @@ import {
 } from './mockData.js'
 
 // Simulate network delay
-const delay = (ms = 300)=> new Promise(resolve=> setTimeout(resolve, ms))
+const delay = (ms = 300)=> new Promise((resolve)=> {
+	window.setTimeout(resolve, ms)
+})
 
 // Mock API for customers
 export const mockCustomerAPI = {
@@ -27,9 +29,9 @@ export const mockCustomerAPI = {
 	async create(customerData){
 		await delay()
 		const generateUUID = ()=> {
-			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c=> {
-				const r = (Math.random() * 16) | 0
-				const v = c === 'x' ? r : (r & 0x3) | 0x8
+			return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c)=> {
+				const r = Math.random() * 16 | 0
+				const v = c === 'x' ? r : r & 0x3 | 0x8
 				return v.toString(16)
 			})
 		}
@@ -54,7 +56,9 @@ export const mockCustomerAPI = {
 		if (index === -1 || customersData[index].deletedAt){
 			return { success: false, error: 'Customer not found' }
 		}
-		customersData[index] = { ...customersData[index], ...customerData, updatedAt: new Date().toISOString() }
+		customersData[index] = {
+			...customersData[index], ...customerData, updatedAt: new Date().toISOString(),
+		}
 		return { success: true, data: customersData[index] }
 	},
 

@@ -1,8 +1,17 @@
 import { doDelete, doGet, doPost, doPut } from './http.js'
 
-// 禁止使用
-export const getCustomers = ()=> {
-	return doGet('customers')
+export const getCustomers = (params, pager)=> {
+	const query = {}
+	if (params){
+		for (const key in params){
+			query[key] = params[key]
+		}
+	}
+	if (pager){
+		query.page = pager.currentPage
+		query.pageSize = pager.pageSize
+	}
+	return doGet('customers', query)
 }
 
 export const getCustomerById = (id)=> {
@@ -23,13 +32,4 @@ export const deleteCustomerById = (id)=> {
 
 export const deleteCustomers = (ids)=> {
 	return doDelete('customers', ids)
-}
-
-export const searchCustomers = (params, pager)=> {
-	if (pager){
-		params = {
-			...params, page: pager.currentPage, pageSize: pager.pageSize,
-		}
-	}
-	return doGet('customers', params)
 }

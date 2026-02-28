@@ -12,7 +12,9 @@ const options = {
 			position: 'top',
 			labels: {
 				color: '#475569',
-				font: { family: "'Inter', sans-serif", size: 13, weight: '500' },
+				font: {
+					family: '\'Inter\', sans-serif', size: 13, weight: '500',
+				},
 			},
 		},
 		title: { display: false },
@@ -24,12 +26,12 @@ const options = {
 			ticks: {
 				color: '#94a3b8',
 				callback: value=> '$' + value.toLocaleString(),
-				font: { family: "'Inter', sans-serif", size: 12 },
+				font: { family: '\'Inter\', sans-serif', size: 12 },
 			},
 		},
 		x: {
 			grid: { display: false },
-			ticks: { color: '#94a3b8', font: { family: "'Inter', sans-serif", size: 12 } },
+			ticks: { color: '#94a3b8', font: { family: '\'Inter\', sans-serif', size: 12 } },
 		},
 	},
 }
@@ -39,19 +41,24 @@ export default function SalesTrendChart(){
 	const [loading, setLoading] = useState(true)
 
 	useEffect(()=> {
+		// eslint-disable-next-line promise/catch-or-return
 		mockDashboardAPI.getSalesTrend()
-			.then((response)=> { if (response.success) setChartData(response.data) })
-			.catch((error)=> console.error('Error loading sales trend:', error))
+			.then((response)=> {
+				if (response.success){
+					setChartData(response.data)
+				}
+				return null
+			})
+			.catch(error=> console.error('Error loading sales trend:', error))
 			.finally(()=> setLoading(false))
 	}, [])
 
 	return (
 		<div className='chart-container full-width'>
-			<div className='chart-header'><h3 className='chart-title'>Sales Trend</h3></div>
-			{loading
-				? <div className='loading'>Loading chart...</div>
-				: chartData && <Line data={chartData} options={options} />
-			}
+			<div className='chart-header'>
+				<h3 className='chart-title'>Sales Trend</h3>
+			</div>
+			{loading ? <div className='loading'>Loading chart...</div> : chartData && <Line data={chartData} options={options} />}
 		</div>
 	)
 }
