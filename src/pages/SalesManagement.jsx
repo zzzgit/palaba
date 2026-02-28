@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
+import { ButtonGroup, Flex, IconButton, Pagination, Table, Text } from '@chakra-ui/react'
 import { mockSalesAPI } from '../mocks/mockAPI.js'
+
+const PAGE_SIZE = 10
 
 const formatCurrency = (value)=> new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value)
 
@@ -16,6 +19,7 @@ export default function SalesManagement(){
 	const [loading, setLoading] = useState(true)
 	const [searchTerm, setSearchTerm] = useState('')
 	const [statusFilter, setStatusFilter] = useState('all')
+	const [currentPage, setCurrentPage] = useState(1)
 
 	useEffect(()=> { loadSales() }, [])
 
@@ -38,6 +42,7 @@ export default function SalesManagement(){
 		)
 		if (status !== 'all') filtered = filtered.filter(s=> s.status === status)
 		setFilteredSales(filtered)
+		setCurrentPage(1)
 	}
 
 	const handleSearch = (value)=> { setSearchTerm(value); applyFilters(value, statusFilter, sales) }
@@ -50,6 +55,11 @@ export default function SalesManagement(){
 
 	const totalRevenue = filteredSales.reduce((sum, s)=> sum + s.amount, 0)
 	const avgOrder = filteredSales.length > 0 ? totalRevenue / filteredSales.length : 0
+
+	const totalPages = Math.ceil(filteredSales.length / PAGE_SIZE)
+	const pagedSales = filteredSales.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
+	const startItem = (currentPage - 1) * PAGE_SIZE + 1
+	const endItem = Math.min(currentPage * PAGE_SIZE, filteredSales.length)
 
 	return (
 		<div className='page-content'>
@@ -118,55 +128,57 @@ export default function SalesManagement(){
 				{loading ? (
 					<div className='loading'>Loading sales...</div>
 				) : (
-					<table>
-						<thead>
-							<tr>
-								<th>Order ID</th>
-								<th>Customer</th>
-								<th>Date</th>
-								<th>Items</th>
-								<th>Amount</th>
-								<th>Status</th>
-								<th style={{ textAlign: 'right' }}>Actions</th>
-							</tr>
-						</thead>
-						<tbody>
-							{filteredSales.map(sale=> (
-								<tr key={sale.id}>
-									<td style={{ color: 'var(--ink-500)', fontWeight: '500' }}>#{sale.id}</td>
-									<td style={{ fontWeight: '600' }}>{sale.customerName}</td>
-									<td style={{ color: 'var(--ink-600)' }}>{sale.orderDate}</td>
-									<td style={{ color: 'var(--ink-600)' }}>{sale.items}</td>
-									<td style={{ fontWeight: '600' }}>{formatCurrency(sale.amount)}</td>
-									<td>
-										<span className={`badge ${statusBadge[sale.status] || 'badge-neutral'}`}>
-											{sale.status}
-										</span>
-									</td>
-									<td>
-										<div className='table-actions-cell' style={{ justifyContent: 'flex-end' }}>
-											{sale.status === 'pending' && (
-												<button
-													className='btn btn-secondary btn-sm'
-													onClick={()=> handleUpdateStatus(sale.id, 'processing')}
-												>
-													Process
-												</button>
-											)}
-											{sale.status === 'processing' && (
-												<button
-													className='btn btn-primary btn-sm'
-													onClick={()=> handleUpdateStatus(sale.id, 'completed')}
-												>
-													Complete
-												</button>
-											)}
-										</div>
-									</td>
-								</tr>
-							))}
-						</tbody>
-					</table>
+					<Table.ScrollArea maxH='calc(100vh - 500px)'>
+						<Table.Root size='sm' stickyHeader>
+							<Table.Header>
+								<Table.Row bg='bg.subtle'>
+									<Table.ColumnHeader>Order ID</Table.ColumnHeader>
+									<Table.ColumnHeader>Customer</Table.ColumnHeader>
+									<Table.ColumnHeader>Date</Table.ColumnHeader>
+									<Table.ColumnHeader>Items</Table.ColumnHeader>
+									<Table.ColumnHeader>Amount</Table.ColumnHeader>
+									<Table.ColumnHeader>Status</Table.ColumnHeader>
+									<Table.ColumnHeader textAlign='end'>Actions</Table.ColumnHeader>
+								</Table.Row>
+							</Table.Header>
+							<Table.Body>
+								{pagedSales.map(sale=> (
+									<Table.Row key={sale.id}>
+										<Table.Cell color='var(--ink-500)' fontWeight='500'>#{sale.id}</Table.Cell>
+										<Table.Cell fontWeight='600'>{sale.customerName}</Table.Cell>
+										<Table.Cell color='var(--ink-600)'>{sale.orderDate}</Table.Cell>
+										<Table.Cell color='var(--ink-600)'>{sale.items}</Table.Cell>
+										<Table.Cell fontWeight='600'>{formatCurrency(sale.amount)}</Table.Cell>
+										<Table.Cell>
+											<span className={`badge ${statusBadge[sale.status] || 'badge-neutral'}`}>
+												{sale.status}
+											</span>
+										</Table.Cell>
+										<Table.Cell>
+											<div className='table-actions-cell' style={{ justifyContent: 'flex-end' }}>
+												{sale.status === 'pending' && (
+													<button
+														className='btn btn-secondary btn-sm'
+														onClick={()=> handleUpdateStatus(sale.id, 'processing')}
+													>
+														Process
+													</button>
+												)}
+												{sale.status === 'processing' && (
+													<button
+														className='btn btn-primary btn-sm'
+														onClick={()=> handleUpdateStatus(sale.id, 'completed')}
+													>
+														Complete
+													</button>
+												)}
+											</div>
+										</Table.Cell>
+									</Table.Row>
+								))}
+							</Table.Body>
+						</Table.Root>
+					</Table.ScrollArea>
 				)}
 
 				{filteredSales.length === 0 && !loading && (
@@ -176,6 +188,40 @@ export default function SalesManagement(){
 						</div>
 						<div className='empty-state-text'>No sales transactions found</div>
 					</div>
+				)}
+
+				{!loading && totalPages > 1 && (
+					<Flex align='center' justify='space-between' px={4} py={3} borderTop='1px solid' borderColor='gray.200'>
+						<Text fontSize='sm' color='gray.500'>
+							Showing {startItem}–{endItem} of {filteredSales.length}
+						</Text>
+						<Pagination.Root
+							count={filteredSales.length}
+							pageSize={PAGE_SIZE}
+							page={currentPage}
+							onPageChange={e=> setCurrentPage(e.page)}
+						>
+							<ButtonGroup variant='ghost' size='sm'>
+								<Pagination.PrevTrigger asChild>
+									<IconButton aria-label='Previous page'>
+										<span className='material-symbols-outlined' style={{ fontSize: '20px' }}>chevron_left</span>
+									</IconButton>
+								</Pagination.PrevTrigger>
+								<Pagination.Items
+									render={(page)=> (
+										<IconButton variant={{ base: 'ghost', _selected: 'outline' }}>
+											{page.value}
+										</IconButton>
+									)}
+								/>
+								<Pagination.NextTrigger asChild>
+									<IconButton aria-label='Next page'>
+										<span className='material-symbols-outlined' style={{ fontSize: '20px' }}>chevron_right</span>
+									</IconButton>
+								</Pagination.NextTrigger>
+							</ButtonGroup>
+						</Pagination.Root>
+					</Flex>
 				)}
 			</div>
 		</div>

@@ -1,13 +1,13 @@
 # Palaba Admin Dashboard - Project Memory
 
 ## Stack
-- **Frontend**: React 18 + Chakra UI v2 + react-router-dom v6
+- **Frontend**: React 18 + Chakra UI v3 (3.33.0) + react-router-dom v6
 - **Charts**: react-chartjs-2 + chart.js
 - **Build**: Vite 5 with @vitejs/plugin-react
 - **Former stack**: Solid.js (fully removed)
 
 ## Key Files
-- `src/main.jsx` — React entry point, ChakraProvider with dark theme
+- `src/main.jsx` — React entry point, ChakraProvider v3 with createSystem + defaultConfig
 - `src/App.jsx` — BrowserRouter + Routes (dashboard, customers, sales)
 - `src/components/MainLayout.jsx` — Holy grail layout with Sidebar + Outlet
 - `src/components/Confirm.jsx` — Global confirm dialog with static `Confirm.it(msg)` API

@@ -1,7 +1,12 @@
 {
   "permissions": {
     "allow": [
-      "Bash(sudo npm install)"
+      "Bash(sudo npm install)",
+      "WebFetch(domain:chakra-ui.com)",
+      "WebSearch",
+      "WebFetch(domain:www.codingeasypeasy.com)",
+      "WebFetch(domain:chakra-ui-docs-next.vercel.app)",
+      "WebFetch(domain:raw.githubusercontent.com)"
     ]
   }
 }

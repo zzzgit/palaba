@@ -1,13 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import {
-	Button,
-	Modal,
-	ModalBody,
-	ModalContent,
-	ModalFooter,
-	ModalHeader,
-	ModalOverlay,
-} from '@chakra-ui/react'
+import { Button, Dialog, Portal } from '@chakra-ui/react'
 
 let _show = null
 
@@ -38,17 +30,23 @@ const Confirm = ()=> {
 	}
 
 	return (
-		<Modal isOpen={open} onClose={handleCancel} isCentered size='sm'>
-			<ModalOverlay bg='blackAlpha.400' backdropFilter='blur(4px)' />
-			<ModalContent>
-				<ModalHeader>確認</ModalHeader>
-				<ModalBody>{message}</ModalBody>
-				<ModalFooter gap={2}>
-					<Button variant='outline' onClick={handleCancel}>取消</Button>
-					<Button colorScheme='red' onClick={handleConfirm}>確定</Button>
-				</ModalFooter>
-			</ModalContent>
-		</Modal>
+		<Dialog.Root open={open} onOpenChange={({ open })=> { if (!open) handleCancel() }} placement='center' size='sm'>
+			<Portal>
+				<Dialog.Backdrop />
+				<Dialog.Positioner>
+					<Dialog.Content>
+						<Dialog.Header>
+							<Dialog.Title>確認</Dialog.Title>
+						</Dialog.Header>
+						<Dialog.Body>{message}</Dialog.Body>
+						<Dialog.Footer gap={2}>
+							<Button variant='outline' onClick={handleCancel}>取消</Button>
+							<Button colorPalette='red' onClick={handleConfirm}>確定</Button>
+						</Dialog.Footer>
+					</Dialog.Content>
+				</Dialog.Positioner>
+			</Portal>
+		</Dialog.Root>
 	)
 }
 

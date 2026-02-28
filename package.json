@@ -10,11 +10,9 @@
         "e2e": "playwright test"
     },
     "dependencies": {
-        "@chakra-ui/react": "^2.10.4",
+        "@chakra-ui/react": "^3.33.0",
         "@emotion/react": "^11.13.5",
-        "@emotion/styled": "^11.13.5",
         "chart.js": "^4.4.0",
-        "framer-motion": "^11.13.1",
         "react": "^18.3.1",
         "react-chartjs-2": "^5.2.0",
         "react-dom": "^18.3.1",
