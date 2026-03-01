@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
-	ButtonGroup, Flex, IconButton, Pagination, Table, Text,
+	Avatar, ButtonGroup, Flex, IconButton, Pagination, Table, Text,
 } from '@chakra-ui/react'
 import { formatDate } from '../lib/utils.js'
 import CustomerDialog from '../components/CustomerDialog.jsx'
@@ -11,12 +11,6 @@ const emptyForm = {
 	name: '', gender: 'M', phone: '', extra: '',
 }
 const PAGE_SIZE = 10
-
-function getInitials(name){
-	return name.split(' ').map(p=> p[0]).join('')
-		.toUpperCase()
-		.slice(0, 2)
-}
 
 export default function CustomerManagement(){
 	const [customers, setCustomers] = useState([])
@@ -151,9 +145,9 @@ export default function CustomerManagement(){
 									<Table.Row key={customer.id}>
 										<Table.Cell>
 											<div className='customer-cell'>
-												<div className='avatar-initials'>
-													{getInitials(customer.name)}
-												</div>
+												<Avatar.Root size='sm'>
+													<Avatar.Fallback name={customer.name} />
+												</Avatar.Root>
 												<span style={{ fontWeight: '600' }}>
 													{customer.name}
 												</span>
